@@ -1,0 +1,24 @@
+# os / editor
+.DS_Store
+.vscode/
+.idea/
+
+# env / secrets
+.env
+.env.*
+*.pem
+secrets/
+
+# deps / build
+node_modules/
+dist/
+build/
+target/
+.venv/
+__pycache__/
+*.pyc
+
+# logs / temp
+*.log
+tmp/
+.cache/
