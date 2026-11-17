@@ -1,7 +1,8 @@
 # AGENTS.md · 项目规则总纲
 
-> 任何 AI（Codex / Claude Code / WorkBuddy / 其他 agent）进入本仓库，先读这一份，再动手。
+> 任何 AI（Qoder / 豆包工作 / Claude Code / WorkBuddy / 其他 agent）进入本仓库，先读这一份，再动手。
 > 这 6 条是硬约束，优先级高于临时指令。
+> Qoder 会自动读取本文件；`.qoder/rules/项目铁律.md` 是同一份内容的规则版，两者冲突时以规则版为准。
 
 ## 1. 单一事实来源（Single Source of Truth）
 

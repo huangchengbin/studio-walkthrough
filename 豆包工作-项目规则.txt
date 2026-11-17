@@ -1,0 +1,8 @@
+【项目规则 · LaoMoSHi_show】
+
+1. 单一事实来源：同一个产品设定只写在一个文档里。改任何内容前先检索 docs/ 全部文档，改完同步所有受影响位置；发现两份文档冲突先停下来问我。
+2. 文档分层：docs/product/ 下 overview（定位）、users-and-stories（角色/故事/优先级）、information-architecture（界面与信息层级）、data-model（表与字段）、tech-stack（选型）、design（视觉规范）；docs/engineering/workflow.md 放开发流程；docs/specs/ 放每轮的 SPEC。不许往 src 放文档，不许另起产品说明文件。
+3. SPEC 驱动：任何功能开发前先写 docs/specs/spec-00X-xxx.md（背景/范围/验收标准/明确不做），开发照它做，验收照它逐条核对；SPEC 之外的需求先补 SPEC。
+4. Git：每次从 main 拉 feature/<短名> 分支，只在分支上改代码，测试通过才合并回 main，禁止直接在 main 上开发。
+5. 阶段推进：严格按 README 的 A→K 顺序，每一步产出后等我确认再继续，不要自动往下跑，也不要提前写业务代码。
+6. 汇报：每个阶段结束说明改了哪些文档、是否有冲突待我拍板、下一步一个推荐方案（不要罗列多个选项）。
