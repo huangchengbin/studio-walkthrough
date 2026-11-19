@@ -15,13 +15,16 @@
   --r-panel:14px;--r-ctl:9px;--r-tag:4px;
   --err:#FF4D4F;--warn:#FAAD14;
   --room:none;
+  --grain:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/><feColorMatrix type='saturate' values='0'/></filter><rect width='140' height='140' filter='url(%23n)' opacity='0.045'/></svg>");
 }
 html,body{height:100%}
 body{font-family:"Microsoft YaHei","Segoe UI",-apple-system,"PingFang SC",sans-serif;color:var(--ink);background:var(--paper);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
 .specbar{height:32px;display:flex;align-items:center;justify-content:center;gap:8px;background:#E9EEF6;border-bottom:1px solid var(--line);font-size:12px;color:#4A5A6B;letter-spacing:.04em}
 .specbar b{font-weight:700;color:var(--blue)}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:999;background-image:var(--grain);mix-blend-mode:multiply}
 .stage{position:relative;height:calc(100vh - 32px);overflow:hidden;background:#0E1420}
 .room{position:absolute;inset:0;background:var(--room) center/cover no-repeat}
+.stage::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:4;background:radial-gradient(125% 95% at 50% 42%,transparent 58%,rgba(10,20,35,.34) 100%)}
 .panel{background:var(--glass);border:1px solid rgba(255,255,255,.95);border-radius:var(--r-panel);box-shadow:var(--shadow-1)}
 .topbar{position:absolute;top:0;left:0;right:0;z-index:10;height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(246,249,253,.9));border-bottom:1px solid rgba(225,231,240,.9);box-shadow:0 8px 28px -18px rgba(12,32,64,.25)}
 .identity{display:flex;align-items:center;gap:12px}
@@ -31,7 +34,7 @@ body{font-family:"Microsoft YaHei","Segoe UI",-apple-system,"PingFang SC",sans-s
 .identity p{font-size:11px;color:var(--muted);margin-top:3px;letter-spacing:.12em}
 .identity p span{margin-left:8px;padding-left:8px;border-left:1px solid var(--line);color:var(--blue);font-weight:600}
 .top-actions{display:flex;gap:10px;align-items:center}
-.btn-primary{height:36px;padding:0 16px;border:0;border-radius:var(--r-ctl);background:linear-gradient(135deg,var(--blue-2),var(--blue));color:#fff;font-size:13px;font-weight:600;letter-spacing:.02em;cursor:pointer;box-shadow:0 6px 16px -8px rgba(22,119,255,.55);transition:transform .15s ease-out,filter .15s ease-out}
+.btn-primary{height:36px;padding:0 16px;border:0;border-radius:var(--r-ctl);background:linear-gradient(135deg,var(--blue-2),var(--blue));color:#fff;font-size:13px;font-weight:600;letter-spacing:.02em;cursor:pointer;box-shadow:0 6px 16px -8px rgba(22,119,255,.55),inset 0 1px 0 rgba(255,255,255,.35);transition:transform .15s ease-out,filter .15s ease-out}
 .btn-primary:hover{filter:brightness(1.05);transform:translateY(-1px)}
 .btn-primary:active{filter:brightness(.96)}
 .btn-outline{height:36px;padding:0 14px;border:1px solid #D8E2EF;border-radius:var(--r-ctl);background:rgba(255,255,255,.85);color:var(--sub);font-size:12px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .15s}
@@ -52,12 +55,14 @@ body{font-family:"Microsoft YaHei","Segoe UI",-apple-system,"PingFang SC",sans-s
 .rail-title{padding:1px 8px 8px}
 .rail-item{display:flex;align-items:center;gap:10px;width:100%;padding:8px 9px;border:0;border-radius:9px;background:none;cursor:pointer;text-align:left;transition:background .16s}
 .rail-item:hover{background:#EAF1F9}
-.rail-item .badge{flex:0 0 26px;height:28px;display:grid;place-items:center;border-radius:7px;background:#EDF2F9;color:#4A5A6B;font-size:12px;font-weight:600;box-shadow:inset 0 0 0 1px #E1E7F0}
+.rail-item{position:relative}
+.rail-item .thumb{flex:0 0 36px;height:36px;border-radius:8px;background:var(--room) center/300% auto;border:1px solid rgba(255,255,255,.95);box-shadow:0 1px 2px rgba(12,32,64,.1)}
 .rail-item strong{display:block;font-size:12px;font-weight:600}
 .rail-item small{display:block;font-size:10px;color:var(--muted);margin-top:2px}
 .rail-item.active{background:linear-gradient(135deg,var(--blue-2),var(--blue));color:#fff;box-shadow:0 6px 16px -8px rgba(22,119,255,.6)}
 .rail-item.active small{color:#DCEBFF}
-.rail-item.active .badge{background:rgba(255,255,255,.15);color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)}
+.rail-item.active::before{content:"";position:absolute;left:0;top:9px;bottom:9px;width:3px;border-radius:2px;background:#fff}
+.rail-item.active .thumb{border-color:rgba(255,255,255,.7)}
 .plan{position:absolute;left:24px;bottom:24px;width:248px;padding:12px 12px 9px;z-index:8}
 .plan-top{display:flex;justify-content:space-between;align-items:center;font-size:11px}
 .plan-top b{font-weight:600}
@@ -68,11 +73,19 @@ body{font-family:"Microsoft YaHei","Segoe UI",-apple-system,"PingFang SC",sans-s
 .dock-btn:hover{background:#EAF1F9}
 .dock-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .dock .divider{width:1px;height:20px;background:var(--line)}
+.dock{box-shadow:var(--shadow-1),inset 0 1px 0 rgba(255,255,255,.9)}
+button:focus-visible,.input:focus-visible,.rail-item:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 .gesture{position:absolute;left:50%;bottom:86px;transform:translateX(-50%);z-index:8}
-.hot{position:absolute;width:12px;height:12px;border-radius:50%;background:var(--blue);box-shadow:0 0 0 6px rgba(22,119,255,.18);cursor:pointer;z-index:5}
-.hot::after{content:"";position:absolute;inset:-12px;border-radius:50%;border:2px solid rgba(22,119,255,.4);animation:pulse 1.6s ease-out infinite}
-@keyframes pulse{0%{transform:scale(.5);opacity:.9}70%{transform:scale(1.1);opacity:0}100%{opacity:0}}
-.hot-label{position:absolute;left:28px;top:-8px;white-space:nowrap;background:var(--glass);border:1px solid rgba(255,255,255,.95);border-radius:9px;box-shadow:var(--shadow-1);padding:8px 12px;display:none;z-index:6}
+.gesture kbd{font:inherit;font-size:10px;line-height:1;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);border-radius:4px;padding:3px 5px;color:#fff;margin:0 2px}
+.pos-badge{position:absolute;right:24px;top:88px;z-index:8;display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;background:rgba(255,255,255,.78);border:1px solid rgba(255,255,255,.95);box-shadow:var(--shadow-1);font-size:11px;color:var(--sub);letter-spacing:.04em}
+.pos-badge .live{width:6px;height:6px;border-radius:50%;background:var(--blue);box-shadow:0 0 0 3px rgba(22,119,255,.18);animation:live 2.2s ease-in-out infinite}
+@keyframes live{50%{opacity:.4}}
+.hot{position:absolute;width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.88);border:1px solid rgba(255,255,255,.95);box-shadow:0 8px 18px -8px rgba(12,32,64,.5),0 0 0 5px rgba(22,119,255,.14);display:grid;place-items:center;font-size:10px;font-weight:700;color:var(--blue);letter-spacing:.02em;cursor:pointer;z-index:5;transition:transform .15s ease-out}
+.hot:hover{transform:scale(1.08)}
+.hot::after{content:"";position:absolute;inset:-9px;border-radius:50%;border:1.5px solid rgba(255,255,255,.65);animation:pulse 2.4s ease-out infinite}
+.hot::before{content:"";position:absolute;inset:-4px;border-radius:50%;border:1px solid rgba(22,119,255,.35);animation:pulse 2.4s ease-out .8s infinite}
+@keyframes pulse{0%{transform:scale(.62);opacity:.95}70%{transform:scale(1.18);opacity:0}100%{opacity:0}}
+.hot-label{position:absolute;left:36px;top:-6px;white-space:nowrap;background:var(--glass);border:1px solid rgba(255,255,255,.95);border-radius:9px;box-shadow:var(--shadow-1);padding:8px 12px;display:none;z-index:6}
 .hot-label strong{display:block;font-size:12px;font-weight:600;color:var(--ink)}
 .hot-label span{display:block;font-size:11px;color:var(--muted);margin-top:2px}
 .hot:hover .hot-label,.hot.active .hot-label{display:block}
@@ -105,7 +118,7 @@ h2.title{font-size:26px;line-height:1.4;font-weight:700;letter-spacing:.01em}
 </head>
 <body>
 
-<div class="specbar"><b>视觉 v3</b> · 蓝系 + V07 质感 · 导览型布局 — UI-04 管理登录页（静态样张）</div>
+<div class="specbar"><b>视觉 v3.1</b> · 蓝系 + V07 质感 · 导览型布局 — UI-04 管理登录页（静态样张）</div>
 <div class="loginwrap">
   <div class="corner-brand"><span class="brandmark"><svg viewBox="0 0 24 24"><path d="M4 10l8-6 8 6v9a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M9 14h6M9 17h6"/></svg></span><strong>劳模创新工作室</strong><span>3D 数字展厅</span></div>
   <div class="panel login-card">
