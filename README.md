@@ -1,7 +1,7 @@
 # LaoMoSHi_show
 
 > 一句话定位：**劳模室 3D 线上展厅——给领导与嘉宾的浏览器漫游参观工具**（详见 `docs/product/overview.md`，产品定位只在那一份描述）。
-> 当前阶段：**第 1 期 · 产品地基（提示词 A→F 进行中：B、C、D 已完成，E、F 待做）**
+> 当前阶段：**第 1 期 · 产品地基收官（A→F 全部完成，第 7 步：停，待人工确认后进第 2 期）**
 
 ## 开工顺序（不可跳步）
 
@@ -11,9 +11,9 @@
 | 2 | 需求收敛 | B | —— | ✅ 已完成（见 `docs/product/overview.md`） |
 | 3 | 用户角色 | C | `docs/product/users-and-stories.md`（角色段） | ✅ 已完成 |
 | 4 | 用户故事 | D | 同上（故事段） | ✅ 已完成 |
-| 5 | 优先级 + 界面 | E | 同上（P0/P1/P2）+ `information-architecture.md` | ⬜ |
-| 6 | 数据模型 + 技术栈 | F | `data-model.md` + `tech-stack.md` | ⬜ |
-| 7 | **停** | —— | —— | ⬜ |
+| 5 | 优先级 + 界面 | E | 同上（P0/P1/P2）+ `information-architecture.md` | ✅ 已完成 |
+| 6 | 数据模型 + 技术栈 | F | `data-model.md` + `tech-stack.md` | ✅ 已完成 |
+| 7 | **停** | —— | —— | ⬅️ 当前（人工确认地基，再决定是否进第 2 期） |
 | 8 | 视觉规范（第 2 期） | G | `design.md` | ⬜ |
 | 9 | 组件与参考站接入 | H | `design.md` 补充 + 引用清单 | ⬜ |
 | 10 | 三方向比稿 | I | `design-lab/` | ⬜ |
