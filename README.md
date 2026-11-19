@@ -1,7 +1,7 @@
 # LaoMoSHi_show
 
 > 一句话定位：**劳模室 3D 线上展厅——给领导与嘉宾的浏览器漫游参观工具**（详见 `docs/product/overview.md`，产品定位只在那一份描述）。
-> 当前阶段：**第 2 期 · 视觉规范完成（G/H/I/J 全部完成，v3 视觉已定稿；下一步 SPEC 化开发）**
+> 当前阶段：**第 3 期 · SPEC 化开发（视觉 v4.3 已定版并打 tag `stage-2-visual-system`；spec-001 待确认）**
 
 ## 开工顺序（不可跳步）
 
@@ -18,7 +18,7 @@
 | 9 | 组件与参考站接入 | H | `design.md` 补充 + 引用清单 | ✅ 已完成 |
 | 10 | 三方向比稿 | I | `design-lab/` | ✅ 已完成（选方向 C 指挥台框景，`design-lab/full/` 六屏已扩展） |
 | 11 | 规范自检页 | J | `docs/design-preview.html` | ✅ 已完成 |
-| 12 | SPEC 化后开发 | —— | `docs/specs/spec-001-*.md` | ⬜ |
+| 12 | SPEC 化后开发 | —— | `docs/specs/spec-001-*.md` | 🟡 spec-001 已起草，待确认后开工 |
 
 ## 目录
 
@@ -33,7 +33,7 @@ LaoMoSHi_show/
 │   ├── product/           产品事实文档（每份只负责一个主题）
 │   ├── engineering/       工程规划（git 流程、测试、发布）
 │   ├── legacy/            既有原型 V07.0 的历史文档归档
-│   └── specs/             需求规格说明书 + 模板
+│   └── specs/             需求规格说明书（spec-001 已起草）+ 模板
 ├── design-lab/            第 2 期风格样张（三方向比稿）
 ├── source/                既有原型 V07.0 的可构建源代码
 ├── dist/index.html        既有原型离线单文件版本（可直接双击运行）
