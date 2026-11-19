@@ -7,10 +7,10 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --blue:#00843D;--blue-2:#2E9E5B;--blue-deep:#006B31;
-  --ink:#1A231E;--sub:#5A6A61;--muted:#8D9A91;--line:#E2E9E3;--paper:#F3F6F3;
-  --glass:linear-gradient(180deg,rgba(255,255,255,.97),rgba(246,250,247,.93));
-  --shadow-1:0 1px 0 rgba(255,255,255,.85) inset,0 10px 30px -12px rgba(12,30,22,.22),0 2px 6px rgba(12,30,22,.06);
+  --blue:#00A85A;--blue-2:#2BD07F;--blue-deep:#006B31;
+  --ink:#E9EEF6;--sub:#A6B3C2;--muted:#77859A;--line:rgba(255,255,255,.09);--paper:#0B111C;
+  --glass:linear-gradient(180deg,rgba(23,32,48,.88),rgba(13,19,30,.92));
+  --shadow-1:0 1px 0 rgba(255,255,255,.07) inset,0 18px 44px -20px rgba(0,0,0,.7),0 2px 8px rgba(0,0,0,.35);
   --shadow-2:0 24px 70px -24px rgba(12,30,22,.38);
   --r-panel:14px;--r-ctl:9px;--r-tag:4px;
   --err:#FF4D4F;--warn:#FAAD14;--ok:#52C41A;
@@ -29,7 +29,7 @@ section{margin-top:40px}
 .sec-head span{font-size:11px;color:var(--muted);letter-spacing:.06em}
 .panel{background:var(--glass);border:1px solid rgba(255,255,255,.95);box-shadow:var(--shadow-1);border-radius:var(--r-panel)}
 .swatches{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-.sw{border-radius:10px;overflow:hidden;border:1px solid var(--line);background:#fff}
+.sw{border-radius:10px;overflow:hidden;border:1px solid var(--line);background:rgba(255,255,255,.04)}
 .sw .c{height:56px}
 .sw .m{padding:8px 10px}
 .sw b{display:block;font-size:11px;font-weight:600}
@@ -60,30 +60,30 @@ section{margin-top:40px}
 .pill{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:999px;background:rgba(16,32,52,.62);color:#F2F6FA;font-size:11px;letter-spacing:.06em}
 .pill span{color:#9FB2C6}
 .row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-.input{height:40px;width:260px;border:1px solid #D8E3DA;border-radius:var(--r-ctl);padding:0 12px;font-size:14px;color:var(--ink);background:#fff;outline:none;font-family:inherit}
+.input{height:40px;width:260px;border:1px solid rgba(255,255,255,.12);border-radius:var(--r-ctl);padding:0 12px;font-size:14px;color:var(--ink);background:rgba(255,255,255,.05);outline:none;font-family:inherit}
 .input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,132,61,.12)}
 .input.force-focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,132,61,.12)}
 .input.err{border-color:var(--err)}
 .field{display:flex;flex-direction:column;gap:5px}
 .field label{font-size:12px;color:#47604F;letter-spacing:.04em}
 .field .err-text{font-size:12px;color:var(--err)}
-.card-demo{width:320px;background:rgba(255,255,255,.9);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;gap:10px;align-items:center}
+.card-demo{width:320px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:14px;display:flex;gap:10px;align-items:center}
 .card-demo .thumb{width:44px;height:44px;border-radius:7px;background:#E9F2EC;box-shadow:inset 0 0 0 1px #E2E9E3}
 .card-demo b{display:block;font-size:12px;font-weight:600}
 .card-demo small{display:block;font-size:10px;color:var(--muted);margin-top:2px;letter-spacing:.04em}
 .card-demo.selected{border-color:var(--blue);box-shadow:inset 3px 0 var(--blue)}
-.skeleton{position:relative;height:300px;border-radius:var(--r-panel);overflow:hidden;background:radial-gradient(120% 100% at 50% 0%,#E8EEF7,#DCE5F1);border:1px solid var(--line)}
-.sk-block{position:absolute;border-radius:8px;background:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.95);box-shadow:var(--shadow-1);font-size:10px;color:var(--muted);letter-spacing:.06em;display:flex;align-items:center;justify-content:center}
+.skeleton{position:relative;height:300px;border-radius:var(--r-panel);overflow:hidden;background:radial-gradient(120% 100% at 50% 0%,#101B2C,#0A1220);border:1px solid rgba(255,255,255,.08)}
+.sk-block{position:absolute;border-radius:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);box-shadow:var(--shadow-1);font-size:10px;color:var(--muted);letter-spacing:.06em;display:flex;align-items:center;justify-content:center}
 .sk-top{left:12px;right:12px;top:12px;height:44px}
 .sk-rail{left:12px;top:68px;bottom:96px;width:150px}
 .sk-plan{left:12px;bottom:12px;width:148px;height:70px}
 .sk-dock{left:50%;transform:translateX(-50%);bottom:12px;width:280px;height:48px}
 .sk-pill{left:50%;transform:translateX(-50%);bottom:70px;width:240px;height:26px;border-radius:999px}
 .sk-hot{position:absolute;width:12px;height:12px;border-radius:50%;background:var(--blue);box-shadow:0 0 0 6px rgba(0,132,61,.18)}
-.fixture{width:400px;max-width:100%;background:var(--glass);border:1px solid rgba(255,255,255,.95);border-radius:var(--r-panel);box-shadow:var(--shadow-1);padding:18px 22px;display:flex;flex-direction:column;gap:12px}
+.fixture{width:400px;max-width:100%;background:var(--glass);border:1px solid rgba(255,255,255,.1);border-radius:var(--r-panel);box-shadow:var(--shadow-1);padding:18px 22px;display:flex;flex-direction:column;gap:12px}
 .fixture h3{font-size:22px;font-weight:700}
 .fixture .body{font-size:13px;line-height:1.9;color:var(--sub)}
-.fixture .media{display:flex;gap:12px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:8px;background:rgba(255,255,255,.6)}
+.fixture .media{display:flex;gap:12px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:8px;background:rgba(255,255,255,.04)}
 .fixture .media-thumb{width:96px;height:54px;border-radius:6px;flex:none;background:#E9F2EC;display:grid;place-items:center}
 .fixture .media-thumb svg{width:20px;height:20px;stroke:var(--blue);fill:none;stroke-width:1.8}
 .fixture .media b{font-size:13px;font-weight:650;display:block}
@@ -95,17 +95,17 @@ section{margin-top:40px}
 <body>
 <div class="wrap">
   <div class="eyebrow">DESIGN.MD · 规范自检页</div>
-  <h1>视觉规范 v3.2 · 自检页</h1>
+  <h1>视觉规范 v4 · 自检页</h1>
   <p class="lead">本页所有元素只允许使用 <code>docs/product/design.md</code> 定义的 token。发现任何颜色、字号、间距、圆角、阴影不在 token 内，即视为违规。样张目录：<code>design-lab/full/</code>。</p>
   <div class="contract">
-    <span class="chip">主色 国网绿 #00843D</span><span class="chip">纸白 #F3F6F3</span><span class="chip">三级圆角 14 / 9 / 4</span><span class="chip">阴影两档</span><span class="chip">间距 4–64（8 档）</span><span class="chip">微软雅黑 · 零 Web 字体</span><span class="chip">字距：标题 .06em / 眉标 .16em</span>
+    <span class="chip">主色 国网绿 #00A85A（深底提亮）</span><span class="chip">纸白 #F3F6F3</span><span class="chip">三级圆角 14 / 9 / 4</span><span class="chip">阴影两档</span><span class="chip">间距 4–64（8 档）</span><span class="chip">微软雅黑 · 零 Web 字体</span><span class="chip">字距：标题 .06em / 眉标 .16em</span>
   </div>
 
   <section>
     <div class="sec-head"><h2>01 · 色板</h2><span>仅绿系装饰色（国网绿）+ 三个功能色</span></div>
     <div class="swatches">
-      <div class="sw"><div class="c" style="background:#00843D"></div><div class="m"><b>主色 · 国网绿（Pantone 348C）</b><span>#00843D · 主操作/选中</span></div></div>
-      <div class="sw"><div class="c" style="background:linear-gradient(135deg,#2E9E5B,#00843D)"></div><div class="m"><b>渐变绿（控件级）</b><span>#2E9E5B → #00843D · 135°</span></div></div>
+      <div class="sw"><div class="c" style="background:#00A85A"></div><div class="m"><b>主色 · 国网绿（Pantone 348C）</b><span>#00A85A · 主操作/选中</span></div></div>
+      <div class="sw"><div class="c" style="background:linear-gradient(135deg,#2BD07F,#00A85A)"></div><div class="m"><b>渐变绿（控件级）</b><span>#2BD07F → #00A85A · 135°</span></div></div>
       <div class="sw"><div class="c" style="background:#1A231E"></div><div class="m"><b>文字主色</b><span>#1A231E</span></div></div>
       <div class="sw"><div class="c" style="background:#5A6A61"></div><div class="m"><b>文字次色</b><span>#5A6A61</span></div></div>
       <div class="sw"><div class="c" style="background:#8D9A91"></div><div class="m"><b>弱化字</b><span>#8D9A91 · 眉标</span></div></div>
@@ -171,7 +171,7 @@ section{margin-top:40px}
       <div class="field"><label>focus（蓝边+光晕）</label><input class="input force-focus" value="admin"></div>
       <div class="field"><label>错误态</label><input class="input err" value="wrong-password"><span class="err-text">账号或密码不正确</span></div>
       <div class="card-demo"><span class="thumb"></span><span><b>高压带电作业工装</b><small>实物装置 · glTF 12.4MB</small></span></div>
-      <div class="card-demo selected"><span class="thumb"></span><span><b>选中态 · 左侧蓝条</b><small>inset 3px #00843D</small></span></div>
+      <div class="card-demo selected"><span class="thumb"></span><span><b>选中态 · 左侧蓝条</b><small>inset 3px #00A85A</small></span></div>
     </div>
   </section>
 
