@@ -7,11 +7,11 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --blue:#1677FF;--blue-2:#4A95FF;--blue-deep:#0E5BD6;
-  --ink:#17212B;--sub:#5B6B7C;--muted:#8A97A6;--line:#E1E7F0;--paper:#F2F5FA;
-  --glass:linear-gradient(180deg,rgba(255,255,255,.97),rgba(245,249,254,.93));
-  --shadow-1:0 1px 0 rgba(255,255,255,.85) inset,0 10px 30px -12px rgba(12,32,64,.22),0 2px 6px rgba(12,32,64,.06);
-  --shadow-2:0 24px 70px -24px rgba(12,32,64,.38);
+  --blue:#00843D;--blue-2:#2E9E5B;--blue-deep:#006B31;
+  --ink:#1A231E;--sub:#5A6A61;--muted:#8D9A91;--line:#E2E9E3;--paper:#F3F6F3;
+  --glass:linear-gradient(180deg,rgba(255,255,255,.97),rgba(246,250,247,.93));
+  --shadow-1:0 1px 0 rgba(255,255,255,.85) inset,0 10px 30px -12px rgba(12,30,22,.22),0 2px 6px rgba(12,30,22,.06);
+  --shadow-2:0 24px 70px -24px rgba(12,30,22,.38);
   --r-panel:14px;--r-ctl:9px;--r-tag:4px;
   --err:#FF4D4F;--warn:#FAAD14;--ok:#52C41A;
 }
@@ -22,7 +22,7 @@ body{font-family:"Microsoft YaHei","Segoe UI",-apple-system,"PingFang SC",sans-s
 h1{font-size:28px;font-weight:700;letter-spacing:.06em;margin-top:8px}
 .lead{font-size:13px;line-height:1.9;color:var(--sub);margin-top:10px;max-width:760px}
 .contract{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
-.chip{font-size:11px;letter-spacing:.04em;color:#4A5A6B;background:#EDF2F9;border-radius:4px;padding:4px 8px}
+.chip{font-size:11px;letter-spacing:.04em;color:#47604F;background:#E9F2EC;border-radius:4px;padding:4px 8px}
 section{margin-top:40px}
 .sec-head{display:flex;align-items:baseline;gap:12px;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:20px}
 .sec-head h2{font-size:18px;font-weight:650;letter-spacing:.02em}
@@ -42,33 +42,33 @@ section{margin-top:40px}
 .space-row .bar{height:10px;border-radius:3px;background:linear-gradient(90deg,var(--blue-2),var(--blue))}
 .space-row code{font-size:11px;color:var(--sub);width:36px;font-family:ui-monospace,Menlo,monospace}
 .space-row span{font-size:11px;color:var(--muted)}
-.btn-primary{height:36px;padding:0 16px;border:0;border-radius:var(--r-ctl);background:linear-gradient(135deg,var(--blue-2),var(--blue));color:#fff;font-size:13px;font-weight:600;letter-spacing:.02em;cursor:pointer;box-shadow:0 6px 16px -8px rgba(22,119,255,.55);white-space:nowrap;display:inline-flex;align-items:center;gap:6px;transition:transform .15s ease-out,filter .15s ease-out}
+.btn-primary{height:36px;padding:0 16px;border:0;border-radius:var(--r-ctl);background:linear-gradient(135deg,var(--blue-2),var(--blue));color:#fff;font-size:13px;font-weight:600;letter-spacing:.02em;cursor:pointer;box-shadow:0 6px 16px -8px rgba(0,132,61,.55);white-space:nowrap;display:inline-flex;align-items:center;gap:6px;transition:transform .15s ease-out,filter .15s ease-out}
 .btn-primary:hover{filter:brightness(1.05);transform:translateY(-1px)}
 .btn-primary:active{filter:brightness(.96)}
 .btn-primary.force-hover{filter:brightness(1.05);transform:translateY(-1px)}
 .btn-primary.force-active{filter:brightness(.96)}
 .btn-primary:disabled,.btn-primary.disabled{opacity:.4;cursor:default;transform:none;filter:none}
 .btn-primary svg,.btn-outline svg{width:16px;height:16px;flex:none;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
-.btn-outline{height:36px;padding:0 14px;border:1px solid #D8E2EF;border-radius:var(--r-ctl);background:rgba(255,255,255,.85);color:var(--sub);font-size:12px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.btn-outline{height:36px;padding:0 14px;border:1px solid #D8E3DA;border-radius:var(--r-ctl);background:rgba(255,255,255,.85);color:var(--sub);font-size:12px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
 .btn-outline:hover{border-color:var(--blue);color:var(--blue)}
 .icon-btn{width:38px;height:38px;border:1px solid rgba(255,255,255,.9);border-radius:10px;background:var(--glass);box-shadow:var(--shadow-1);display:grid;place-items:center;cursor:pointer}
 .icon-btn svg{width:18px;height:18px;stroke:var(--sub);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
-.segment{display:inline-flex;gap:3px;padding:4px;background:#E9EEF6;border-radius:10px;box-shadow:inset 0 1px 2px rgba(12,32,64,.08)}
+.segment{display:inline-flex;gap:3px;padding:4px;background:#E8F0E9;border-radius:10px;box-shadow:inset 0 1px 2px rgba(12,30,22,.08)}
 .segment button{height:30px;padding:0 14px;border:0;border-radius:7px;background:none;font-size:12px;color:var(--sub);cursor:pointer}
-.segment button.selected{background:#fff;color:var(--blue);font-weight:650;box-shadow:0 1px 2px rgba(12,32,64,.12),0 4px 12px -6px rgba(12,32,64,.25)}
-.tag{display:inline-flex;height:22px;padding:0 8px;align-items:center;border-radius:var(--r-tag);background:#EDF2F9;color:#4A5A6B;font-size:12px}
+.segment button.selected{background:#fff;color:var(--blue);font-weight:650;box-shadow:0 1px 2px rgba(12,30,22,.12),0 4px 12px -6px rgba(12,30,22,.25)}
+.tag{display:inline-flex;height:22px;padding:0 8px;align-items:center;border-radius:var(--r-tag);background:#E9F2EC;color:#47604F;font-size:12px}
 .pill{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:999px;background:rgba(16,32,52,.62);color:#F2F6FA;font-size:11px;letter-spacing:.06em}
 .pill span{color:#9FB2C6}
 .row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-.input{height:40px;width:260px;border:1px solid #D8E2EF;border-radius:var(--r-ctl);padding:0 12px;font-size:14px;color:var(--ink);background:#fff;outline:none;font-family:inherit}
-.input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(22,119,255,.12)}
-.input.force-focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(22,119,255,.12)}
+.input{height:40px;width:260px;border:1px solid #D8E3DA;border-radius:var(--r-ctl);padding:0 12px;font-size:14px;color:var(--ink);background:#fff;outline:none;font-family:inherit}
+.input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,132,61,.12)}
+.input.force-focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,132,61,.12)}
 .input.err{border-color:var(--err)}
 .field{display:flex;flex-direction:column;gap:5px}
-.field label{font-size:12px;color:#4A5A6B;letter-spacing:.04em}
+.field label{font-size:12px;color:#47604F;letter-spacing:.04em}
 .field .err-text{font-size:12px;color:var(--err)}
 .card-demo{width:320px;background:rgba(255,255,255,.9);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;gap:10px;align-items:center}
-.card-demo .thumb{width:44px;height:44px;border-radius:7px;background:#EDF2F9;box-shadow:inset 0 0 0 1px #E1E7F0}
+.card-demo .thumb{width:44px;height:44px;border-radius:7px;background:#E9F2EC;box-shadow:inset 0 0 0 1px #E2E9E3}
 .card-demo b{display:block;font-size:12px;font-weight:600}
 .card-demo small{display:block;font-size:10px;color:var(--muted);margin-top:2px;letter-spacing:.04em}
 .card-demo.selected{border-color:var(--blue);box-shadow:inset 3px 0 var(--blue)}
@@ -79,12 +79,12 @@ section{margin-top:40px}
 .sk-plan{left:12px;bottom:12px;width:148px;height:70px}
 .sk-dock{left:50%;transform:translateX(-50%);bottom:12px;width:280px;height:48px}
 .sk-pill{left:50%;transform:translateX(-50%);bottom:70px;width:240px;height:26px;border-radius:999px}
-.sk-hot{position:absolute;width:12px;height:12px;border-radius:50%;background:var(--blue);box-shadow:0 0 0 6px rgba(22,119,255,.18)}
+.sk-hot{position:absolute;width:12px;height:12px;border-radius:50%;background:var(--blue);box-shadow:0 0 0 6px rgba(0,132,61,.18)}
 .fixture{width:400px;max-width:100%;background:var(--glass);border:1px solid rgba(255,255,255,.95);border-radius:var(--r-panel);box-shadow:var(--shadow-1);padding:18px 22px;display:flex;flex-direction:column;gap:12px}
 .fixture h3{font-size:22px;font-weight:700}
 .fixture .body{font-size:13px;line-height:1.9;color:var(--sub)}
 .fixture .media{display:flex;gap:12px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:8px;background:rgba(255,255,255,.6)}
-.fixture .media-thumb{width:96px;height:54px;border-radius:6px;flex:none;background:#EDF2F9;display:grid;place-items:center}
+.fixture .media-thumb{width:96px;height:54px;border-radius:6px;flex:none;background:#E9F2EC;display:grid;place-items:center}
 .fixture .media-thumb svg{width:20px;height:20px;stroke:var(--blue);fill:none;stroke-width:1.8}
 .fixture .media b{font-size:13px;font-weight:650;display:block}
 .fixture .media span{font-size:11px;color:var(--muted);letter-spacing:.04em;display:block;margin-top:2px}
@@ -95,27 +95,27 @@ section{margin-top:40px}
 <body>
 <div class="wrap">
   <div class="eyebrow">DESIGN.MD · 规范自检页</div>
-  <h1>视觉规范 v3 · 自检页</h1>
+  <h1>视觉规范 v3.2 · 自检页</h1>
   <p class="lead">本页所有元素只允许使用 <code>docs/product/design.md</code> 定义的 token。发现任何颜色、字号、间距、圆角、阴影不在 token 内，即视为违规。样张目录：<code>design-lab/full/</code>。</p>
   <div class="contract">
-    <span class="chip">主色 #1677FF</span><span class="chip">纸白 #F2F5FA</span><span class="chip">三级圆角 14 / 9 / 4</span><span class="chip">阴影两档</span><span class="chip">间距 4–64（8 档）</span><span class="chip">微软雅黑 · 零 Web 字体</span><span class="chip">字距：标题 .06em / 眉标 .16em</span>
+    <span class="chip">主色 国网绿 #00843D</span><span class="chip">纸白 #F3F6F3</span><span class="chip">三级圆角 14 / 9 / 4</span><span class="chip">阴影两档</span><span class="chip">间距 4–64（8 档）</span><span class="chip">微软雅黑 · 零 Web 字体</span><span class="chip">字距：标题 .06em / 眉标 .16em</span>
   </div>
 
   <section>
-    <div class="sec-head"><h2>01 · 色板</h2><span>仅蓝系装饰色 + 三个功能色</span></div>
+    <div class="sec-head"><h2>01 · 色板</h2><span>仅绿系装饰色（国网绿）+ 三个功能色</span></div>
     <div class="swatches">
-      <div class="sw"><div class="c" style="background:#1677FF"></div><div class="m"><b>主色 · 科技蓝</b><span>#1677FF · 主操作/选中</span></div></div>
-      <div class="sw"><div class="c" style="background:linear-gradient(135deg,#4A95FF,#1677FF)"></div><div class="m"><b>渐变蓝（控件级）</b><span>#4A95FF → #1677FF · 135°</span></div></div>
-      <div class="sw"><div class="c" style="background:#17212B"></div><div class="m"><b>文字主色</b><span>#17212B</span></div></div>
-      <div class="sw"><div class="c" style="background:#5B6B7C"></div><div class="m"><b>文字次色</b><span>#5B6B7C</span></div></div>
-      <div class="sw"><div class="c" style="background:#8A97A6"></div><div class="m"><b>弱化字</b><span>#8A97A6 · 眉标</span></div></div>
-      <div class="sw"><div class="c" style="background:#E1E7F0"></div><div class="m"><b>描边/分隔</b><span>#E1E7F0</span></div></div>
-      <div class="sw"><div class="c" style="background:#F2F5FA"></div><div class="m"><b>背景 · 纸白</b><span>#F2F5FA</span></div></div>
-      <div class="sw"><div class="c" style="background:#EDF2F9"></div><div class="m"><b>标签底</b><span>#EDF2F9 · 字 #4A5A6B</span></div></div>
+      <div class="sw"><div class="c" style="background:#00843D"></div><div class="m"><b>主色 · 国网绿（Pantone 348C）</b><span>#00843D · 主操作/选中</span></div></div>
+      <div class="sw"><div class="c" style="background:linear-gradient(135deg,#2E9E5B,#00843D)"></div><div class="m"><b>渐变绿（控件级）</b><span>#2E9E5B → #00843D · 135°</span></div></div>
+      <div class="sw"><div class="c" style="background:#1A231E"></div><div class="m"><b>文字主色</b><span>#1A231E</span></div></div>
+      <div class="sw"><div class="c" style="background:#5A6A61"></div><div class="m"><b>文字次色</b><span>#5A6A61</span></div></div>
+      <div class="sw"><div class="c" style="background:#8D9A91"></div><div class="m"><b>弱化字</b><span>#8D9A91 · 眉标</span></div></div>
+      <div class="sw"><div class="c" style="background:#E2E9E3"></div><div class="m"><b>描边/分隔</b><span>#E2E9E3</span></div></div>
+      <div class="sw"><div class="c" style="background:#F3F6F3"></div><div class="m"><b>背景 · 纸白</b><span>#F3F6F3</span></div></div>
+      <div class="sw"><div class="c" style="background:#E9F2EC"></div><div class="m"><b>标签底</b><span>#E9F2EC · 字 #47604F</span></div></div>
       <div class="sw"><div class="c" style="background:#FF4D4F"></div><div class="m"><b>错误色</b><span>#FF4D4F · 仅状态</span></div></div>
       <div class="sw"><div class="c" style="background:#FAAD14"></div><div class="m"><b>警示色</b><span>#FAAD14 · 未保存</span></div></div>
       <div class="sw"><div class="c" style="background:#52C41A"></div><div class="m"><b>成功色</b><span>#52C41A · 仅状态</span></div></div>
-      <div class="sw"><div class="c" style="background:var(--glass);box-shadow:inset 0 0 0 1px #E1E7F0"></div><div class="m"><b>玻璃面板</b><span>白渐变 + shadow-1</span></div></div>
+      <div class="sw"><div class="c" style="background:var(--glass);box-shadow:inset 0 0 0 1px #E2E9E3"></div><div class="m"><b>玻璃面板</b><span>白渐变 + shadow-1</span></div></div>
     </div>
   </section>
 
@@ -171,7 +171,7 @@ section{margin-top:40px}
       <div class="field"><label>focus（蓝边+光晕）</label><input class="input force-focus" value="admin"></div>
       <div class="field"><label>错误态</label><input class="input err" value="wrong-password"><span class="err-text">账号或密码不正确</span></div>
       <div class="card-demo"><span class="thumb"></span><span><b>高压带电作业工装</b><small>实物装置 · glTF 12.4MB</small></span></div>
-      <div class="card-demo selected"><span class="thumb"></span><span><b>选中态 · 左侧蓝条</b><small>inset 3px #1677FF</small></span></div>
+      <div class="card-demo selected"><span class="thumb"></span><span><b>选中态 · 左侧蓝条</b><small>inset 3px #00843D</small></span></div>
     </div>
   </section>
 
