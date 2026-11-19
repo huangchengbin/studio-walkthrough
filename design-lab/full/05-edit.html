@@ -7,7 +7,7 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --blue:#00A85A;--blue-2:#2BD07F;--blue-deep:#00854A;
+  --blue:#3B82F6;--blue-2:#5C9EFF;--blue-deep:#2563EB;
   --ink:#E9EEF6;--sub:#A6B3C2;--muted:#77859A;--line:rgba(255,255,255,.09);--paper:#0B111C;
   --glass:linear-gradient(180deg,rgba(23,32,48,.88),rgba(13,19,30,.92));
   --shadow-1:0 1px 0 rgba(255,255,255,.07) inset,0 18px 44px -20px rgba(0,0,0,.7),0 2px 8px rgba(0,0,0,.35);
@@ -29,13 +29,13 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:999;ba
 .panel{background:var(--glass);border:1px solid rgba(255,255,255,.1);border-radius:var(--r-panel);box-shadow:var(--shadow-1)}
 .topbar{position:absolute;top:0;left:0;right:0;z-index:10;height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;background:linear-gradient(180deg,rgba(10,15,25,.92),rgba(9,13,22,.88));border-bottom:1px solid rgba(255,255,255,.08);box-shadow:0 12px 32px -22px rgba(0,0,0,.8)}
 .identity{display:flex;align-items:center;gap:12px}
-.brandmark{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--blue-2),var(--blue));display:grid;place-items:center;box-shadow:0 3px 8px -2px rgba(0,190,102,.4)}
+.brandmark{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--blue-2),var(--blue));display:grid;place-items:center;box-shadow:0 3px 8px -2px rgba(59,130,246,.4)}
 .brandmark svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .identity h1{font-size:19px;font-weight:700;letter-spacing:.08em}
 .identity p{font-size:11px;color:var(--muted);margin-top:3px;letter-spacing:.12em}
 .identity p span{margin-left:8px;padding-left:8px;border-left:1px solid var(--line);color:var(--blue);font-weight:600}
 .top-actions{display:flex;gap:10px;align-items:center}
-.btn-primary{height:36px;padding:0 16px;border:0;border-radius:var(--r-ctl);background:linear-gradient(135deg,var(--blue-2),var(--blue));color:#fff;font-size:13px;font-weight:600;letter-spacing:.02em;cursor:pointer;box-shadow:0 6px 16px -8px rgba(0,190,102,.55),inset 0 1px 0 rgba(255,255,255,.35);transition:transform .15s ease-out,filter .15s ease-out}
+.btn-primary{height:36px;padding:0 16px;border:0;border-radius:var(--r-ctl);background:linear-gradient(135deg,var(--blue-2),var(--blue));color:#fff;font-size:13px;font-weight:600;letter-spacing:.02em;cursor:pointer;box-shadow:0 6px 16px -8px rgba(59,130,246,.55),inset 0 1px 0 rgba(255,255,255,.35);transition:transform .15s ease-out,filter .15s ease-out}
 .btn-primary:hover{filter:brightness(1.05);transform:translateY(-1px)}
 .btn-primary:active{filter:brightness(.96)}
 .btn-outline{height:36px;padding:0 14px;border:1px solid rgba(255,255,255,.14);border-radius:var(--r-ctl);background:rgba(255,255,255,.05);color:var(--sub);font-size:12px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .15s}
@@ -49,7 +49,7 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:999;ba
 .tag{display:inline-flex;height:22px;padding:0 8px;align-items:center;border-radius:var(--r-tag);background:rgba(255,255,255,.07);color:#C3D0DE;font-size:12px}
 .segment{display:flex;gap:3px;padding:4px;background:rgba(255,255,255,.06);border-radius:10px;box-shadow:inset 0 1px 2px rgba(0,0,0,.35)}
 .segment button{height:30px;padding:0 14px;border:0;border-radius:7px;background:none;font-size:12px;color:var(--sub);cursor:pointer;transition:all .16s}
-.segment button.selected{background:rgba(0,190,102,.16);color:#3BE08C;font-weight:650;box-shadow:0 0 0 1px rgba(0,190,102,.35),0 6px 18px -8px rgba(0,190,102,.5)}
+.segment button.selected{background:rgba(59,130,246,.16);color:#8CBDFF;font-weight:650;box-shadow:0 0 0 1px rgba(59,130,246,.35),0 6px 18px -8px rgba(59,130,246,.5)}
 .hint-pill{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:999px;background:rgba(16,32,52,.62);color:#F2F6FA;font-size:11px;letter-spacing:.06em}
 .hint-pill span{color:#9FB2C6}
 .rail{position:absolute;left:24px;top:96px;width:252px;max-height:calc(100% - 352px);overflow:auto;padding:12px 9px 8px;z-index:8}
@@ -60,7 +60,7 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:999;ba
 .rail-item .thumb{flex:0 0 36px;height:36px;border-radius:8px;background:var(--room) center/300% auto;border:1px solid rgba(255,255,255,.18);box-shadow:0 1px 2px rgba(0,0,0,.4)}
 .rail-item strong{display:block;font-size:12px;font-weight:600}
 .rail-item small{display:block;font-size:10px;color:var(--muted);margin-top:2px}
-.rail-item.active{background:linear-gradient(135deg,var(--blue-2),var(--blue));color:#fff;box-shadow:0 6px 16px -8px rgba(0,190,102,.6)}
+.rail-item.active{background:linear-gradient(135deg,var(--blue-2),var(--blue));color:#fff;box-shadow:0 6px 16px -8px rgba(59,130,246,.6)}
 .rail-item.active small{color:#DCEBFF}
 .rail-item.active::before{content:"";position:absolute;left:0;top:9px;bottom:9px;width:3px;border-radius:2px;background:#fff}
 .rail-item.active .thumb{border-color:rgba(255,255,255,.7)}
@@ -79,12 +79,12 @@ button:focus-visible,.input:focus-visible,.rail-item:focus-visible{outline:2px s
 .gesture{position:absolute;left:50%;bottom:86px;transform:translateX(-50%);z-index:8}
 .gesture kbd{font:inherit;font-size:10px;line-height:1;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);border-radius:4px;padding:3px 5px;color:#fff;margin:0 2px}
 .pos-badge{position:absolute;right:24px;top:88px;z-index:8;display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;background:rgba(16,24,38,.82);border:1px solid rgba(255,255,255,.12);box-shadow:var(--shadow-1);font-size:11px;color:var(--sub);letter-spacing:.04em}
-.pos-badge .live{width:6px;height:6px;border-radius:50%;background:var(--blue);box-shadow:0 0 0 3px rgba(0,190,102,.18);animation:live 2.2s ease-in-out infinite}
+.pos-badge .live{width:6px;height:6px;border-radius:50%;background:var(--blue);box-shadow:0 0 0 3px rgba(59,130,246,.18);animation:live 2.2s ease-in-out infinite}
 @keyframes live{50%{opacity:.4}}
-.hot{position:absolute;width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.88);border:1px solid rgba(255,255,255,.95);box-shadow:0 8px 18px -8px rgba(12,30,22,.5),0 0 0 5px rgba(0,190,102,.14);display:grid;place-items:center;font-size:10px;font-weight:700;color:var(--blue);letter-spacing:.02em;cursor:pointer;z-index:5;transition:transform .15s ease-out}
+.hot{position:absolute;width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.88);border:1px solid rgba(255,255,255,.95);box-shadow:0 8px 18px -8px rgba(12,30,22,.5),0 0 0 5px rgba(59,130,246,.14);display:grid;place-items:center;font-size:10px;font-weight:700;color:var(--blue);letter-spacing:.02em;cursor:pointer;z-index:5;transition:transform .15s ease-out}
 .hot:hover{transform:scale(1.08)}
 .hot::after{content:"";position:absolute;inset:-9px;border-radius:50%;border:1.5px solid rgba(255,255,255,.65);animation:pulse 2.4s ease-out infinite}
-.hot::before{content:"";position:absolute;inset:-4px;border-radius:50%;border:1px solid rgba(0,190,102,.35);animation:pulse 2.4s ease-out .8s infinite}
+.hot::before{content:"";position:absolute;inset:-4px;border-radius:50%;border:1px solid rgba(59,130,246,.35);animation:pulse 2.4s ease-out .8s infinite}
 @keyframes pulse{0%{transform:scale(.62);opacity:.95}70%{transform:scale(1.18);opacity:0}100%{opacity:0}}
 .hot-label{position:absolute;left:36px;top:-6px;white-space:nowrap;background:var(--glass);border:1px solid rgba(255,255,255,.95);border-radius:9px;box-shadow:var(--shadow-1);padding:8px 12px;display:none;z-index:6}
 .hot-label strong{display:block;font-size:12px;font-weight:600;color:var(--ink)}
@@ -101,9 +101,9 @@ h2.title{font-size:26px;line-height:1.4;font-weight:700;letter-spacing:.01em}
 .media-thumb svg{width:20px;height:20px;stroke:#fff;fill:rgba(16,32,52,.4);stroke-width:1.8}
 .field label{display:block;font-size:12px;color:#47604F;margin-bottom:5px;letter-spacing:.04em}
 .input{height:40px;width:100%;border:1px solid rgba(255,255,255,.12);border-radius:var(--r-ctl);padding:0 12px;font-size:14px;color:var(--ink);background:rgba(255,255,255,.05);outline:none;transition:border-color .15s,box-shadow .15s}
-.input:focus{border-color:#00A85A;box-shadow:0 0 0 3px rgba(0,190,102,.22)}
+.input:focus{border-color:#3B82F6;box-shadow:0 0 0 3px rgba(59,130,246,.22)}
 
-.selbox{position:absolute;border:1.5px dashed var(--blue);background:rgba(0,190,102,.06);z-index:6;border-radius:2px}
+.selbox{position:absolute;border:1.5px dashed var(--blue);background:rgba(59,130,246,.06);z-index:6;border-radius:2px}
 .selbox .h{position:absolute;width:7px;height:7px;background:#fff;border:1.5px solid var(--blue);border-radius:2px}
 .tl{top:-4px;left:-4px}.tr{top:-4px;right:-4px}.bl{bottom:-4px;left:-4px}.br{bottom:-4px;right:-4px}
 .gizmo{position:absolute;left:50%;top:50%;width:96px;height:96px;transform:translate(-50%,-50%)}
@@ -113,7 +113,7 @@ h2.title{font-size:26px;line-height:1.4;font-weight:700;letter-spacing:.01em}
 </head>
 <body>
 
-<div class="specbar"><b>视觉 v4 · 深色蓝黑</b> · 国网绿 + V07 质感 · 导览型布局 — UI-05 布放编辑模式（静态样张）</div>
+<div class="specbar"><b>视觉 v4 · 深色蓝黑</b> · 深蓝科技 + V07 质感 · 导览型布局 — UI-05 布放编辑模式（静态样张）</div>
 <div class="stage">
   <div class="room" role="img" aria-label="劳模室场景（样张假数据）"></div>
   <header class="topbar"><div class="identity"><span class="brandmark"><svg viewBox="0 0 24 24"><path d="M4 10l8-6 8 6v9a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M9 14h6M9 17h6"/></svg></span><div><h1>劳模创新工作室</h1><p>3D 数字展厅<span>V1 · 导览版</span></p></div></div>
@@ -128,12 +128,12 @@ h2.title{font-size:26px;line-height:1.4;font-weight:700;letter-spacing:.01em}
   <div class="selbox" style="left:46%;top:50%;width:17%;height:24%">
     <span class="h tl"></span><span class="h tr"></span><span class="h bl"></span><span class="h br"></span>
     <svg class="gizmo" viewBox="0 0 120 120">
-      <line x1="60" y1="60" x2="108" y2="60" stroke="#00A85A" stroke-width="2"/>
-      <path d="M108 60l-8 -4v8z" fill="#00A85A"/>
-      <line x1="60" y1="60" x2="60" y2="12" stroke="#00A85A" stroke-width="2"/>
-      <path d="M60 12l-4 8h8z" fill="#00A85A"/>
-      <circle cx="60" cy="60" r="40" fill="none" stroke="rgba(0,190,102,.55)" stroke-width="1.5" stroke-dasharray="4 4"/>
-      <circle cx="60" cy="60" r="4" fill="#fff" stroke="#00A85A" stroke-width="2"/>
+      <line x1="60" y1="60" x2="108" y2="60" stroke="#3B82F6" stroke-width="2"/>
+      <path d="M108 60l-8 -4v8z" fill="#3B82F6"/>
+      <line x1="60" y1="60" x2="60" y2="12" stroke="#3B82F6" stroke-width="2"/>
+      <path d="M60 12l-4 8h8z" fill="#3B82F6"/>
+      <circle cx="60" cy="60" r="40" fill="none" stroke="rgba(59,130,246,.55)" stroke-width="1.5" stroke-dasharray="4 4"/>
+      <circle cx="60" cy="60" r="4" fill="#fff" stroke="#3B82F6" stroke-width="2"/>
     </svg>
     <span class="selname">高压带电作业工装</span>
   </div>
@@ -142,7 +142,7 @@ h2.title{font-size:26px;line-height:1.4;font-weight:700;letter-spacing:.01em}
   <div class="hot" style="left:78%;top:54%">03<div class="hot-label"><strong>智能巡检机器人</strong><span>点击查看详情</span></div></div>
   <div class="hint-pill gesture">拖拽箭头移动 <span>·</span> 拖拽圆环旋转 <span>·</span> 保存后立即对观众生效</div>
   <footer class="panel dock">
-    <span class="tag" style="background:rgba(0,190,102,.1);color:var(--blue)">编辑模式</span>
+    <span class="tag" style="background:rgba(59,130,246,.1);color:var(--blue)">编辑模式</span>
     <span class="divider"></span>
     <span style="font-size:12px;color:var(--sub);padding:0 6px">选中成果：高压带电作业工装 · 中央展台</span>
   </footer>
