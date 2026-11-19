@@ -1,7 +1,7 @@
 # LaoMoSHi_show
 
 > 一句话定位：**劳模室 3D 线上展厅——给领导与嘉宾的浏览器漫游参观工具**（详见 `docs/product/overview.md`，产品定位只在那一份描述）。
-> 当前阶段：**第 2 期 · 视觉规范与比稿（G、H 完成；I 样张已出，待选方向）**
+> 当前阶段：**第 2 期 · 视觉规范完成（G/H/I/J 全部完成，v3 视觉已定稿；下一步 SPEC 化开发）**
 
 ## 开工顺序（不可跳步）
 
@@ -14,10 +14,10 @@
 | 5 | 优先级 + 界面 | E | 同上（P0/P1/P2）+ `information-architecture.md` | ✅ 已完成 |
 | 6 | 数据模型 + 技术栈 | F | `data-model.md` + `tech-stack.md` | ✅ 已完成 |
 | 7 | **停** | —— | —— | ✅ 已确认，进入第 2 期 |
-| 8 | 视觉规范（第 2 期） | G | `design.md` | ✅ 已完成（5 分歧点已拍板） |
+| 8 | 视觉规范（第 2 期） | G | `design.md` | ✅ 已完成（v3 回炉，见拍板记录） |
 | 9 | 组件与参考站接入 | H | `design.md` 补充 + 引用清单 | ✅ 已完成 |
 | 10 | 三方向比稿 | I | `design-lab/` | ✅ 已完成（选方向 C 指挥台框景，`design-lab/full/` 六屏已扩展） |
-| 11 | 规范自检页 | J | `docs/design-preview.html` | ⬜ |
+| 11 | 规范自检页 | J | `docs/design-preview.html` | ✅ 已完成 |
 | 12 | SPEC 化后开发 | —— | `docs/specs/spec-001-*.md` | ⬜ |
 
 ## 目录
