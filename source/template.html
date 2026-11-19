@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light"><title>工作室 · V07.0 质感升级</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath fill='%23156361' d='M3 3h19v9h7v17H3z'/%3E%3Cpath fill='none' stroke='white' stroke-width='2' d='M9 23V9h8v7h6v7z'/%3E%3C/svg%3E">
+<style>
+/*__CSS__*/
+</style>
+</head>
+<body>
+<!-- Full-screen spatial viewer. Palette: porcelain #f5f7f5, teal #156361,
+slate #253c40, cool grey #dce6e3, exhibit gold #bd9254. The room is the hero;
+Chinese controls stay quiet at its edges; the floor map carries spatial orientation. -->
+<main id="viewer" aria-label="工作室三维空间，拖动环视，WASD 移动" tabindex="0"></main>
+<header class="topbar">
+ <div class="identity"><svg viewBox="0 0 38 38" aria-hidden="true"><path d="M5 5h20v11h8v17H5z"/><path d="M12 26V12h7v10h7v4z"/></svg><div><h1>工作室漫游</h1><p>现状空间复原 <span>V07.0 · 质感升级</span></p></div></div>
+ <div class="top-actions">
+  <div class="segment" aria-label="陈设版本"><button id="stocked" class="selected" aria-pressed="true">有物品</button><button id="empty" aria-pressed="false">仅基础设施</button><button id="custom" aria-pressed="false">我的布置</button></div>
+  <label class="quality-label" for="quality-select">画质<select id="quality-select"><option value="fast">流畅</option><option value="balanced" selected>均衡</option><option value="detail">精细</option></select></label><button id="catalog-button" class="catalog-launch">成果库 <span>22</span></button><button class="icon-btn" id="help" aria-label="操作帮助" title="操作帮助"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.2 2.4c-.7.2-.7 1-.7 1.6M12 16h.01"/></svg></button>
+ </div>
+</header>
+<aside class="viewpoints" aria-label="快速切换观察点">
+ <div class="rail-title">选择观察点</div>
+ <button data-view="center" class="active" aria-pressed="true"><span class="letter center-icon">⌖</span><span>房间中央<small>360° 环视</small></span><i></i></button>
+ <button data-view="A" aria-pressed="false"><span class="letter">A</span><span>能源演示<small>西侧壁画与设备</small></span><i></i></button>
+ <button data-view="B" aria-pressed="false"><span class="letter">B</span><span>创新成果<small>南侧双屏与展台</small></span><i></i></button>
+ <button data-view="C" aria-pressed="false"><span class="letter">C</span><span>荣誉展示<small>双屏与错层陈列</small></span><i></i></button>
+ <button data-view="D" aria-pressed="false"><span class="letter">D</span><span>荣誉展示<small>东侧陈列与窗口</small></span><i></i></button>
+ <button data-view="E" aria-pressed="false"><span class="letter">E</span><span>拼接大屏<small>九屏与精神标语</small></span><i></i></button>
+ <button data-view="F" aria-pressed="false"><span class="letter">F</span><span>工作室介绍<small>人物与简介展示墙</small></span><i></i></button>
+ <button data-view="G" aria-pressed="false"><span class="letter">G</span><span>产学研用<small>东北侧文化墙</small></span><i></i></button>
+ <button data-view="H" aria-pressed="false"><span class="letter">H</span><span>标识与查询<small>C 面背侧与查询屏</small></span><i></i></button>
+ <button data-view="I" aria-pressed="false"><span class="letter">I</span><span>机房设备<small>机柜与配电柜</small></span><i></i></button>
+ <button data-view="server" aria-pressed="false"><span class="letter">⌑</span><span>机房桌面<small>椭圆桌与六把座椅</small></span><i></i></button>
+</aside>
+<section class="map-panel" id="map-panel" aria-label="平面定位">
+ <div class="map-top"><b>平面定位</b><button id="plan-button">查看平面图 <span>↗</span></button></div>
+ <canvas id="minimap" width="520" height="420" aria-label="平面图，点击空地移动到该位置" role="img"></canvas>
+ <p id="map-caption">点击空地，切换站立位置</p>
+</section>
+<div class="compass" aria-label="朝向"><span id="heading">N</span><svg id="compass-needle" viewBox="0 0 40 40"><path d="M20 5l6 18-6-4-6 4z"/><path d="M20 35l-6-12 6 4 6-4z"/></svg></div>
+<div class="right-tools">
+ <button id="fullscreen" class="icon-btn" title="全屏" aria-label="全屏"><svg viewBox="0 0 24 24"><path d="M8 4H4v4m12-4h4v4M4 16v4h4m12-4v4h-4"/></svg></button>
+ <button id="snapshot" class="icon-btn" title="保存当前视图" aria-label="保存当前视图"><svg viewBox="0 0 24 24"><path d="M4 7h4l2-3h4l2 3h4v13H4z"/><circle cx="12" cy="13" r="4"/></svg></button>
+ <button id="zoom-in" class="icon-btn" title="拉近" aria-label="拉近"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5v14"/></svg></button>
+ <button id="zoom-out" class="icon-btn" title="拉远" aria-label="拉远"><svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg></button>
+ <button id="mobile-map" class="icon-btn" aria-label="显示平面定位" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="m3 5 6-2 6 2 6-2v16l-6 2-6-2-6 2zM9 3v16M15 5v16"/></svg></button>
+</div>
+<div class="position-badge"><span class="live-dot"></span><span id="position-label">房间中央</span><span id="ready-status">正在载入</span></div>
+<footer class="control-dock">
+ <div class="mode-switch"><button id="walk" class="selected" aria-pressed="true">室内环视</button><button id="overview" aria-pressed="false">整体鸟瞰</button></div>
+ <span class="dock-divider"></span><button id="auto" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M18.5 7A8 8 0 1 0 20 15M18 3v5h-5"/></svg><span>自动环视</span></button>
+ <button id="reset"><svg viewBox="0 0 24 24"><path d="m4 11 8-7 8 7M7 10v10h10V10M10 20v-6h4v6"/></svg><span>回到中央</span></button>
+</footer>
+<div class="gesture-hint" id="gesture-hint">拖动画面环视 <span>·</span> WASD / 方向键移动 <span>·</span> 滚轮调整视野</div>
+<div id="joystick" aria-label="按住并拖动摇杆移动"><div id="joystick-knob"></div><span>移动</span></div>
+<div id="toast" role="status" aria-live="polite"></div>
+<div id="loader"><div class="loader-mark"><span></span></div><h2>正在进入工作室</h2><p id="load-detail">载入 A—I 面、机房、原有展品与 22 项成果</p></div>
+<div id="error-panel" hidden><img id="fallback" alt="工作室三维模型预览"><div><h2>当前浏览器未能启动三维显示</h2><p id="error-message">请用新版 Chrome 或 Edge 打开，并启用硬件加速。</p><button id="reload">重新加载</button></div></div>
+<dialog id="help-dialog"><button class="close-dialog" aria-label="关闭帮助">×</button><h2>像站在房间里一样看</h2><p class="dialog-lead">平面布局和全部三维元素已预先载入，打开即进入中央视点。</p><div class="help-grid"><b>环视</b><span>按住鼠标拖动；触屏直接滑动。</span><b>移动</b><span>WASD、方向键，或触屏左下角摇杆；碰到墙体和主要设施会停止。</span><b>换位置</b><span>点击 A–I 或机房桌面观察点，或平面图上的空地。</span><b>看整体</b><span>切换“整体鸟瞰”，拖动旋转、滚轮缩放。返回室内会回到上次站立位置。</span><b>切换陈设</b><span>有物品 / 仅基础设施 / 我的布置，三种陈设使用同一个空间。</span></div><p class="performance-note">均衡/精细画质采用基于物理的材质、室内环境光反射、柔和实时阴影、环境光遮蔽与色调分级；精细档额外启用高光泛光。流畅档关闭阴影与后期处理，适合集成显卡或旧电脑；均衡档会根据移动时的帧间隔自适应清晰度。</p><p class="model-note">已根据“整体1110-1”和实物照片补充机房、A 面线缆演示、I 面机柜与桌椅。成果库包含 6 项可独立摆放的模型及原始简介。B 面展品已细化，上一版其他元素继续预载。当前为照片比例复原，不标注长度；不可见结构适度简化。</p><p class="model-note">点击“成果库”查看模型、简介和原图，选择展台或空地后放入“我的布置”。旋转、缩放和方向按钮可继续调整，点击“在图上摆放”可移至地面空地。布置会自动保存在本浏览器；建议导出 JSON 备份，或导出含当前布置的离线软件副本。</p><p class="source-line">基于 Three.js（MIT）开发。所有模型和贴图随软件打包，运行时无需联网。</p></dialog>
+<dialog id="plan-dialog"><button class="close-dialog" aria-label="关闭平面图">×</button><h2>已载入的平面布局</h2><p>与三维模型共用同一套比例关系；未标注长度。</p><img id="plan-image" alt="工作室整体布局平面图"></dialog>
+<aside id="layout-panel" hidden aria-label="我的布置编辑器">
+ <div class="layout-heading"><h2>我的布置 <small id="layout-count">0 / 36</small></h2><button id="catalog-add-more">＋ 添加</button></div>
+ <label for="placed-list">当前成果</label><select id="placed-list"></select>
+ <div class="adjust-line"><span>朝向 <b id="rotation-value">—</b></span><button id="rotate-left" data-needs-item aria-label="向左旋转">↶ 15°</button><button id="rotate-right" data-needs-item aria-label="向右旋转">15° ↷</button></div>
+ <label class="scale-line" for="model-scale">大小 <b id="scale-value">—</b><input id="model-scale" data-needs-item type="range" min=".2" max="2" step=".05" value="1"></label>
+ <div class="nudge-controls"><span>按图调整</span><button data-needs-item data-nudge="-.06,0" aria-label="向西移动">←</button><button data-needs-item data-nudge="0,.06" aria-label="向北移动">↑</button><button data-needs-item data-nudge="0,-.06" aria-label="向南移动">↓</button><button data-needs-item data-nudge=".06,0" aria-label="向东移动">→</button></div>
+ <div class="layout-row"><button id="relocate-asset" data-needs-item>在图上摆放</button><button id="remove-asset" data-needs-item>移除</button><button id="layout-undo" title="撤销">↶</button><button id="layout-redo" title="重做">↷</button></div>
+ <div class="layout-io"><button id="layout-export">导出方案</button><button id="layout-import">导入方案</button><button id="layout-copy">导出离线副本</button></div>
+ <button id="layout-seed" class="seed-button">载入 6 件预载成果</button><small id="save-status">自动保存</small><input id="layout-file" type="file" accept=".json,application/json" hidden>
+</aside>
+<dialog id="catalog-dialog" class="catalog-dialog"><button class="close-dialog" aria-label="关闭成果库">×</button>
+ <div class="catalog-heading"><div><p>工作室 · 成果档案</p><h2>成果库 <small id="catalog-total">22 项成果</small></h2></div><span>查看原型 · 选择摆放</span></div>
+ <div class="catalog-body"><section class="catalog-index" aria-label="成果列表"><input id="catalog-search" type="search" placeholder="搜索名称或关键词" aria-label="搜索成果"><select id="catalog-filter" aria-label="成果分类"><option value="">全部分类</option></select><div id="asset-list"></div></section>
+ <article class="asset-detail"><div class="asset-visual"><div id="model-preview" aria-label="成果三维预览，拖动旋转"></div><span class="preview-caption">拖动旋转 · 滚轮缩放</span><button id="asset-placard">查看原始简介牌 ↗</button><img id="asset-photo" alt="原始实物参考" title="查看原始实物参考"></div>
+ <div class="asset-text"><p id="asset-code" class="eyebrow"></p><h3 id="asset-name"></h3><p id="asset-aliases"></p><p id="asset-summary"></p><ul id="asset-features"></ul><details><summary>完整简介</summary><p id="asset-description"></p></details><details><summary>模型与照片对应说明</summary><p id="asset-notes"></p></details><p id="asset-source"></p></div>
+ <p id="catalog-feedback" role="status" aria-live="polite"></p><div class="place-bar"><label for="place-surface">放在</label><select id="place-surface"></select><button id="add-asset">放入基础环境 ＋</button></div></article></div>
+</dialog>
+<dialog id="reference-dialog"><button class="close-dialog" aria-label="关闭原始图片">×</button><h2 id="reference-title">原始参考</h2><img id="reference-image" alt="用户提供的原始参考图片"></dialog>
+<section id="v06-spacebar" aria-label="展示空间设置"><label>展品比例 <input id="v06-scale" type="range" min="60" max="100" value="72" step="1"><b id="v06-scale-value">72%</b></label><label>视野 <select id="v06-fov"><option value="68">聚焦 68°</option><option value="78" selected>开阔 78°</option><option value="86">广角 86°</option></select></label></section>
+
+<script id="v06-settings">window.STUDIO_VISUAL_SCALE=.72;</script>
+<script id="studio-data" type="application/octet-stream" data-encoding="gzip-base64">
+/*__DATA__*/
+</script>
+<script id="studio-layout" type="application/json">null</script>
+<script id="studio-worker" type="application/x-worker">
+/*__WORKER__*/
+</script>
+<script id="studio-app">
+/*__APP__*/
+</script>
+</body></html>
