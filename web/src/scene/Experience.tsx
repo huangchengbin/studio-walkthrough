@@ -19,7 +19,7 @@ function Exhibit({ a, playing }: { a: Achievement; playing: boolean }) {
         <>
           <mesh position={[0, 0.25, 0]}>
             <boxGeometry args={[1.1, 0.5, 0.8]} />
-            <meshStandardMaterial color="#243447" roughness={0.7} />
+            <meshStandardMaterial color="#E9EEF5" roughness={0.6} />
           </mesh>
           <mesh position={[0, 0.78, 0]} rotation={[0, 0.4, 0]}>
             <cylinderGeometry args={[0.34, 0.4, 0.5, 20]} />
@@ -35,7 +35,7 @@ function Exhibit({ a, playing }: { a: Achievement; playing: boolean }) {
         <>
           <mesh position={[0, 0.12, 0]}>
             <boxGeometry args={[1.0, 0.24, 0.8]} />
-            <meshStandardMaterial color="#222F42" roughness={0.6} />
+            <meshStandardMaterial color="#E9EEF5" roughness={0.6} />
           </mesh>
           <mesh position={[0, 0.6, 0]}>
             <cylinderGeometry args={[0.3, 0.34, 0.72, 20]} />
@@ -55,7 +55,7 @@ function Exhibit({ a, playing }: { a: Achievement; playing: boolean }) {
         <>
           <mesh position={[0, 1.7, 0]}>
             <boxGeometry args={[3.0, 1.7, 0.12]} />
-            <meshStandardMaterial color="#1E2A3C" roughness={0.8} />
+            <meshStandardMaterial color="#E2E8F0" roughness={0.75} />
           </mesh>
           <mesh position={[0, 2.2, 0.07]}>
             <boxGeometry args={[2.6, 0.6, 0.04]} />
@@ -63,7 +63,7 @@ function Exhibit({ a, playing }: { a: Achievement; playing: boolean }) {
           </mesh>
           <mesh position={[0, 1.35, 0.07]}>
             <boxGeometry args={[2.6, 0.9, 0.04]} />
-            <meshStandardMaterial color="#2A3A50" roughness={0.6} />
+            <meshStandardMaterial color="#EDF1F5" roughness={0.6} />
           </mesh>
         </>
       )}
@@ -71,7 +71,7 @@ function Exhibit({ a, playing }: { a: Achievement; playing: boolean }) {
         <>
           <mesh position={[0, 1.6, 0]}>
             <boxGeometry args={[1.7, 1.05, 0.08]} />
-            <meshStandardMaterial color="#0F1B31" roughness={0.3} metalness={0.2} />
+            <meshStandardMaterial color="#2C3A4E" roughness={0.35} metalness={0.2} />
           </mesh>
           <mesh position={[0, 1.6, 0.06]}>
             <planeGeometry args={[1.56, 0.92]} />
@@ -79,7 +79,7 @@ function Exhibit({ a, playing }: { a: Achievement; playing: boolean }) {
           </mesh>
           <mesh position={[0, 0.6, 0]}>
             <boxGeometry args={[1.5, 0.5, 0.4]} />
-            <meshStandardMaterial color="#1B2839" roughness={0.7} />
+            <meshStandardMaterial color="#E9EEF5" roughness={0.6} />
           </mesh>
         </>
       )}
@@ -87,7 +87,7 @@ function Exhibit({ a, playing }: { a: Achievement; playing: boolean }) {
         <>
           <mesh position={[0, 1.75, 0]}>
             <boxGeometry args={[3.4, 1.6, 0.1]} />
-            <meshStandardMaterial color="#1D2939" roughness={0.8} />
+            <meshStandardMaterial color="#E6EBF2" roughness={0.75} />
           </mesh>
           <mesh position={[-0.9, 1.95, 0.06]}>
             <boxGeometry args={[1.1, 0.5, 0.03]} />
@@ -95,7 +95,7 @@ function Exhibit({ a, playing }: { a: Achievement; playing: boolean }) {
           </mesh>
           <mesh position={[0.55, 1.75, 0.06]}>
             <boxGeometry args={[1.7, 0.8, 0.03]} />
-            <meshStandardMaterial color="#2C3D55" roughness={0.6} />
+            <meshStandardMaterial color="#DCE4EE" roughness={0.6} />
           </mesh>
         </>
       )}
@@ -109,55 +109,55 @@ function Room() {
     <group>
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
         <planeGeometry args={[w, d]} />
-        <meshStandardMaterial color="#233149" roughness={0.85} />
+        <meshStandardMaterial color="#C9B393" roughness={0.8} />
       </mesh>
       <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, h, 0]}>
         <planeGeometry args={[w, d]} />
-        <meshStandardMaterial color="#1A2536" roughness={0.95} />
+        <meshStandardMaterial color="#F4F6F9" roughness={0.95} />
       </mesh>
       <mesh position={[0, h / 2, -d / 2]}>
         <boxGeometry args={[w, h, 0.12]} />
-        <meshStandardMaterial color="#2A3A52" roughness={0.85} />
+        <meshStandardMaterial color="#EDF1F5" roughness={0.9} />
       </mesh>
       <mesh position={[0, h / 2, d / 2]} rotation={[0, Math.PI, 0]}>
         <boxGeometry args={[w, h, 0.12]} />
-        <meshStandardMaterial color="#27364C" roughness={0.85} />
+        <meshStandardMaterial color="#E8EDF3" roughness={0.9} />
       </mesh>
       <mesh position={[-w / 2, h / 2, 0]} rotation={[0, Math.PI / 2, 0]}>
         <boxGeometry args={[d, h, 0.12]} />
-        <meshStandardMaterial color="#28374E" roughness={0.85} />
+        <meshStandardMaterial color="#E8EDF3" roughness={0.9} />
       </mesh>
       <mesh position={[w / 2, h / 2, 0]} rotation={[0, -Math.PI / 2, 0]}>
         <boxGeometry args={[d, h, 0.12]} />
-        <meshStandardMaterial color="#28374E" roughness={0.85} />
+        <meshStandardMaterial color="#E8EDF3" roughness={0.9} />
       </mesh>
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.011, 0]}>
         <ringGeometry args={[1.2, 1.24, 64]} />
-        <meshBasicMaterial color="#2E64B8" transparent opacity={0.25} />
+        <meshBasicMaterial color="#3B82F6" transparent opacity={0.32} />
       </mesh>
       {/* 踢脚线 */}
       <mesh position={[0, 0.06, -d / 2 + 0.1]}>
         <boxGeometry args={[w - 0.2, 0.12, 0.04]} />
-        <meshStandardMaterial color="#31445E" roughness={0.7} />
+        <meshStandardMaterial color="#D6DDE7" roughness={0.7} />
       </mesh>
       <mesh position={[0, 0.06, d / 2 - 0.1]}>
         <boxGeometry args={[w - 0.2, 0.12, 0.04]} />
-        <meshStandardMaterial color="#31445E" roughness={0.7} />
+        <meshStandardMaterial color="#D6DDE7" roughness={0.7} />
       </mesh>
       <mesh position={[-w / 2 + 0.1, 0.06, 0]}>
         <boxGeometry args={[0.04, 0.12, d - 0.2]} />
-        <meshStandardMaterial color="#31445E" roughness={0.7} />
+        <meshStandardMaterial color="#D6DDE7" roughness={0.7} />
       </mesh>
       <mesh position={[w / 2 - 0.1, 0.06, 0]}>
         <boxGeometry args={[0.04, 0.12, d - 0.2]} />
-        <meshStandardMaterial color="#31445E" roughness={0.7} />
+        <meshStandardMaterial color="#D6DDE7" roughness={0.7} />
       </mesh>
       {/* 顶部灯带 */}
       <mesh position={[0, h - 0.06, -d / 2 + 0.08]}>
         <boxGeometry args={[w - 1.2, 0.035, 0.025]} />
-        <meshStandardMaterial color="#4C7FC8" emissive="#3B82F6" emissiveIntensity={0.9} />
+        <meshStandardMaterial color="#C9D9F2" emissive="#8FB8F0" emissiveIntensity={0.8} />
       </mesh>
-      <spotLight position={[0, h - 0.2, 0]} angle={0.9} penumbra={0.6} intensity={18} color="#CFE3FF" distance={12} decay={2} />
+      <spotLight position={[0, h - 0.2, 0]} angle={0.9} penumbra={0.6} intensity={14} color="#FFF9F0" distance={12} decay={2} />
     </group>
   )
 }
@@ -189,13 +189,13 @@ export default function Experience({ fly, playing, onPick, onFlyDone }: Props) {
 
   return (
     <>
-      <color attach="background" args={['#0B1220']} />
-      <fog attach="fog" args={['#0B1220', 16, 34]} />
-      <ambientLight intensity={0.85} />
-      <hemisphereLight args={["#8FB4E8", "#16202F", 0.55]} />
-      <directionalLight position={[5, 8, 4]} intensity={1.5} color="#EAF1FF" />
-      <pointLight position={[-4, 3, 2]} intensity={0.9} color="#3B82F6" />
-      <pointLight position={[0, 2.9, -3.4]} intensity={0.7} color="#7CB8FF" />
+      <color attach="background" args={['#E9EEF4']} />
+      <fog attach="fog" args={['#E9EEF4', 20, 46]} />
+      <ambientLight intensity={1.05} />
+      <hemisphereLight args={["#FFFFFF", "#D8C6AC", 0.8]} />
+      <directionalLight position={[6, 9, 5]} intensity={2.0} color="#FFF6E8" />
+      <pointLight position={[-4, 3, 2]} intensity={1.2} color="#FFE9C9" />
+      <pointLight position={[3, 2.9, -2]} intensity={0.8} color="#BFD8FF" />
       <pointLight position={[4, 3, -2]} intensity={0.35} color="#7CB8FF" />
       <Room />
       {achievements.map((a) => (

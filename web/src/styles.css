@@ -71,9 +71,9 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:900;ba
 
 /* 场景热点（drei Html 内） */
 .hotspot-wrap{pointer-events:none}
-.hotspot{pointer-events:auto;position:relative;width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.9);border:1px solid rgba(255,255,255,.95);box-shadow:0 8px 18px -8px rgba(3,9,22,.6),0 0 0 5px rgba(59,130,246,.14);display:grid;place-items:center;font-size:10px;font-weight:700;color:#12386E;letter-spacing:.02em;cursor:pointer;transition:transform .15s}
+.hotspot{pointer-events:auto;position:relative;width:26px;height:26px;border-radius:50%;background:#12386E;border:1px solid rgba(255,255,255,.85);box-shadow:0 10px 22px -10px rgba(3,9,22,.55),0 0 0 5px rgba(59,130,246,.18);display:grid;place-items:center;font-size:10px;font-weight:700;color:#fff;letter-spacing:.02em;cursor:pointer;transition:transform .15s}
 .hotspot:hover{transform:scale(1.08)}
-.hotspot::after{content:"";position:absolute;inset:-9px;border-radius:50%;border:1.5px solid rgba(255,255,255,.65);animation:pulse 2.4s ease-out infinite}
+.hotspot::after{content:"";position:absolute;inset:-9px;border-radius:50%;border:1.5px solid rgba(18,56,110,.35);animation:pulse 2.4s ease-out infinite}
 .hotspot::before{content:"";position:absolute;inset:-4px;border-radius:50%;border:1px solid rgba(59,130,246,.35);animation:pulse 2.4s ease-out .8s infinite}
 @keyframes pulse{0%{transform:scale(.62);opacity:.95}70%{transform:scale(1.18);opacity:0}100%{opacity:0}}
 .hotspot .tip{position:absolute;left:36px;top:-6px;white-space:nowrap;background:#fff;border-radius:9px;box-shadow:0 12px 30px -14px rgba(3,9,22,.7);padding:7px 11px;display:none;text-align:left}
