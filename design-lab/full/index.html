@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>方向 C · 六屏索引 — 劳模室样张</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --blue:#1677FF;--blue-h:#4096FF;--blue-a:#0958D9;
+  --bg:#F5F7FA;--card:#FFFFFF;--line:#E3E8EF;
+  --t1:#1F2329;--t2:#6B7280;--t3:#C0C6CF;--chip:#EDF1F6;--chip-t:#4A5261;
+  --shadow:0 12px 32px rgba(15,23,42,.12);
+  --room:none;
+}
+html,body{height:100%}
+body{font-family:"Microsoft YaHei","Segoe UI",-apple-system,"PingFang SC","HarmonyOS Sans",sans-serif;color:var(--t1);background:var(--bg);font-variant-numeric:tabular-nums}
+.specbar{height:32px;display:flex;align-items:center;justify-content:center;gap:8px;background:var(--chip);border-bottom:1px solid var(--line);font-size:12px;color:var(--chip-t)}
+.specbar b{font-weight:700;color:var(--blue)}
+.app{display:flex;flex-direction:column;height:calc(100vh - 32px)}
+.topbar{height:56px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 24px;background:var(--card);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:baseline;gap:8px}
+.brand h1{font-size:14px;font-weight:700}
+.brand span{font-size:12px;color:var(--t2)}
+.viewport{position:relative;flex:1;margin:24px;border-radius:8px;overflow:hidden;background:#0E1116;box-shadow:var(--shadow)}
+.room{position:absolute;inset:0;background:var(--room) center/cover no-repeat}
+.corner{position:absolute;width:16px;height:16px;border:2px solid rgba(255,255,255,.55);z-index:7}
+.c1{top:12px;left:12px;border-right:0;border-bottom:0}
+.c2{top:12px;right:12px;border-left:0;border-bottom:0}
+.c3{bottom:12px;left:12px;border-right:0;border-top:0}
+.c4{bottom:12px;right:12px;border-left:0;border-top:0}
+.hot{position:absolute;width:12px;height:12px;border-radius:50%;background:var(--blue);box-shadow:0 0 0 6px rgba(22,119,255,.18);cursor:pointer;z-index:5}
+.hot::after{content:"";position:absolute;inset:-12px;border-radius:50%;border:2px solid rgba(22,119,255,.4);animation:pulse 1.6s ease-out infinite}
+@keyframes pulse{0%{transform:scale(.5);opacity:.9}70%{transform:scale(1.1);opacity:0}100%{opacity:0}}
+.hot-label{position:absolute;left:28px;top:-8px;white-space:nowrap;background:var(--card);border:1px solid var(--line);border-radius:8px;box-shadow:var(--shadow);padding:8px 12px;display:none;z-index:6}
+.hot-label strong{display:block;font-size:12px;font-weight:600;color:var(--t1)}
+.hot-label span{display:block;font-size:12px;color:var(--t2);margin-top:2px}
+.hot:hover .hot-label,.hot.active .hot-label{display:block}
+.bottombar{height:56px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 24px;background:var(--card);border-top:1px solid var(--line);font-size:12px;color:var(--t2)}
+.tips{display:flex;align-items:center;gap:16px}
+.tips i{display:flex;align-items:center;gap:6px;font-style:normal}
+.legend{display:flex;align-items:center;gap:8px}
+.legend .dot{width:8px;height:8px;border-radius:50%;background:var(--blue)}
+.btn-primary{height:40px;padding:0 20px;border:0;border-radius:8px;background:var(--blue);color:#fff;font-size:14px;font-weight:600;cursor:pointer;transition:background .15s ease-out}
+.btn-primary:hover{background:var(--blue-h)}
+.btn-primary:active{background:var(--blue-a)}
+.btn-primary.sm{height:32px;padding:0 12px;font-size:12px}
+.btn-outline{height:32px;padding:0 12px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--t2);font-size:12px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.btn-outline:hover{color:var(--t1);border-color:#C9D1DC}
+.btn-ghost{height:32px;padding:0 12px;border:1px solid var(--line);border-radius:8px;background:transparent;color:var(--t2);font-size:12px;cursor:pointer}
+.btn-ghost:hover{color:var(--t1);border-color:#C9D1DC}
+.tag{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:4px;background:var(--chip);color:var(--chip-t);font-size:12px}
+.icon{width:14px;height:14px;stroke:var(--t2);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.drawer{position:absolute;top:0;bottom:0;right:0;width:400px;background:var(--card);border-left:1px solid var(--line);box-shadow:-12px 0 32px rgba(15,23,42,.12);z-index:20;display:flex;flex-direction:column}
+.drawer.left{left:0;right:auto;border-left:0;border-right:1px solid var(--line);box-shadow:12px 0 32px rgba(15,23,42,.12);width:360px}
+.drawer-head{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid var(--line)}
+.drawer-title{font-size:14px;font-weight:700}
+.icon-btn{width:32px;height:32px;border:0;border-radius:8px;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.icon-btn:hover{background:var(--bg)}
+.icon-btn svg{width:16px;height:16px;stroke:var(--t2);fill:none;stroke-width:1.8;stroke-linecap:round}
+.drawer-body{padding:24px;overflow:auto;display:flex;flex-direction:column;gap:16px;flex:1}
+.drawer-foot{padding:16px 24px;border-top:1px solid var(--line);font-size:12px;color:var(--t2)}
+.scrim{position:absolute;inset:0;background:rgba(15,23,42,.24);z-index:15}
+.field label{display:block;font-size:12px;color:var(--chip-t);margin-bottom:4px}
+.input{height:40px;width:100%;border:1px solid var(--line);border-radius:8px;padding:0 12px;font-size:14px;color:var(--t1);background:var(--card);outline:none;transition:border-color .15s ease-out,box-shadow .15s ease-out}
+.input:focus{border-color:var(--blue);box-shadow:0 0 0 2px rgba(22,119,255,.15)}
+.err{border-color:#FF4D4F}
+.err-text{font-size:12px;color:#FF4D4F;margin-top:4px}
+
+.idx{max-width:760px;margin:0 auto;padding:48px 24px}
+.idx-head h1{font-size:28px;font-weight:700}
+.idx-head p{font-size:12px;color:var(--t2);margin-top:8px;line-height:1.7}
+.list{margin-top:32px;display:flex;flex-direction:column;gap:12px}
+.row{display:flex;align-items:center;gap:16px;padding:16px;background:var(--card);border:1px solid var(--line);border-radius:8px;text-decoration:none;color:var(--t1)}
+.row:hover{border-color:var(--blue)}
+.no{font-size:12px;color:var(--t3);width:24px}
+.t{flex:1}
+.t strong{display:block;font-size:14px;font-weight:600}
+.t span{display:block;font-size:12px;color:var(--t2);margin-top:2px}
+.go{font-size:12px;color:var(--blue)}
+.foot{font-size:12px;color:var(--t3);margin-top:32px;line-height:1.7}
+</style>
+</head>
+<body>
+
+<div class="specbar"><b>方向 C</b> · 指挥台框景 — 完整六屏索引（静态样张 · 假数据）</div>
+<div class="idx">
+  <div class="idx-head">
+    <h1>方向 C · 指挥台框景</h1>
+    <p>六屏静态样张 · 全部遵守 design.md 契约：浅色 #F5F7FA / 科技蓝 #1677FF / 微软雅黑 / 全局 8px / 间距 4–64</p>
+  </div>
+  <div class="list">
+  <a class="row" href="01-loading.html">
+    <span class="no">01</span>
+    <span class="t"><strong>UI-01 加载页</strong><span>进度提示 + 自动进入，不让用户多点一下</span></span>
+    <span class="go">打开 →</span>
+  </a>
+  <a class="row" href="02-scene.html">
+    <span class="no">02</span>
+    <span class="t"><strong>UI-02 漫游主场景（首页）</strong><span>框景视口 + 四角角标 + 底部操作提示</span></span>
+    <span class="go">打开 →</span>
+  </a>
+  <a class="row" href="03-detail.html">
+    <span class="no">03</span>
+    <span class="t"><strong>UI-03 成果介绍浮层</strong><span>右侧 400px 抽屉：标签 / 图文 / 功能演示</span></span>
+    <span class="go">打开 →</span>
+  </a>
+  <a class="row" href="04-login.html">
+    <span class="no">04</span>
+    <span class="t"><strong>UI-04 管理登录页</strong><span>居中卡片，无注册无找回密码</span></span>
+    <span class="go">打开 →</span>
+  </a>
+  <a class="row" href="05-edit.html">
+    <span class="no">05</span>
+    <span class="t"><strong>UI-05 布放编辑模式</strong><span>工具条（成果库/保存/退出）+ 选中框与手柄</span></span>
+    <span class="go">打开 →</span>
+  </a>
+  <a class="row" href="06-library.html">
+    <span class="no">06</span>
+    <span class="t"><strong>UI-06 成果库浮层</strong><span>左侧 360px 抽屉：清单可拖 + 上传入口</span></span>
+    <span class="go">打开 →</span>
+  </a>
+  </div>
+  <p class="foot">假数据说明：场景图为 AI 生成占位图；真实劳模室将按 CAD 图纸 + 实景照片用 Blender 建模输出（见 tech-stack.md 资产生产管线）。</p>
+</div>
+<script>
+document.querySelectorAll('.hot').forEach(function(h){
+  h.addEventListener('click', function(e){
+    document.querySelectorAll('.hot').forEach(function(x){x.classList.remove('active')});
+    h.classList.add('active'); e.stopPropagation();
+  });
+});
+document.querySelectorAll('[data-close]').forEach(function(b){
+  b.addEventListener('click', function(){
+    var el = document.getElementById(b.getAttribute('data-close'));
+    if(el) el.style.display = 'none';
+    var s = document.querySelector('.scrim'); if(s) s.style.display = 'none';
+  });
+});
+</script>
+</body>
+</html>
