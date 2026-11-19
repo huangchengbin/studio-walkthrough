@@ -5,8 +5,8 @@ import type { FlyTarget } from '../App'
 
 interface Obstacle { x: number; z: number; r: number }
 
-const EYE = 1.6
-const SPEED = 2.7
+const EYE = 1.66
+const SPEED = 1.55
 const BOUND = { x: 5.2, z: 3.2 }
 
 export default function WalkControls({
@@ -42,13 +42,17 @@ export default function WalkControls({
       const dx = e.clientX - last.current[0]
       const dy = e.clientY - last.current[1]
       last.current = [e.clientX, e.clientY]
-      yaw.current -= dx * 0.0032
-      pitch.current = THREE.MathUtils.clamp(pitch.current - dy * 0.0028, -1.15, 1.15)
+      yaw.current -= dx * 0.0042
+      pitch.current = THREE.MathUtils.clamp(pitch.current - dy * 0.0036, -1.32, 1.32)
     }
+    let lastWheel = 0
     const wheel = (e: WheelEvent) => {
       e.preventDefault()
+      const now = performance.now()
+      if (now - lastWheel < 70) return
+      lastWheel = now
       const cam = camera as THREE.PerspectiveCamera
-      cam.fov = THREE.MathUtils.clamp(cam.fov + e.deltaY * 0.02, 45, 80)
+      cam.fov = THREE.MathUtils.clamp(cam.fov + Math.sign(e.deltaY) * 5, 40, 92)
       cam.updateProjectionMatrix()
     }
     const keyHandler = (v: boolean) => (e: KeyboardEvent) => {
@@ -99,15 +103,15 @@ export default function WalkControls({
     if (f) {
       const target = new THREE.Vector3(...f.pos)
       const look = new THREE.Vector3(...f.look)
-      cam.position.lerp(target, 1 - Math.pow(0.0005, d))
+      cam.position.lerp(target, 1 - Math.pow(0.000002, d))
       const dir = look.clone().sub(cam.position)
       const targetYaw = Math.atan2(-dir.x, -dir.z)
       const targetPitch = Math.asin(THREE.MathUtils.clamp(dir.y / (dir.length() || 1), -1, 1))
       let dy = targetYaw - yaw.current
       while (dy > Math.PI) dy -= Math.PI * 2
       while (dy < -Math.PI) dy += Math.PI * 2
-      yaw.current += dy * (1 - Math.pow(0.0008, d))
-      pitch.current += (targetPitch - pitch.current) * (1 - Math.pow(0.0008, d))
+      yaw.current += dy * (1 - Math.pow(0.000004, d))
+      pitch.current += (targetPitch - pitch.current) * (1 - Math.pow(0.000004, d))
       if (cam.position.distanceTo(target) < 0.08) {
         flyRef.current = null
         onFlyDone()

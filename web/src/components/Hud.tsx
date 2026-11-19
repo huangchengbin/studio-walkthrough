@@ -10,9 +10,10 @@ interface Props {
   onDismissGuide: () => void
   onHelp: () => void
   onAdmin: () => void
+  onCenter: () => void
 }
 
-export default function Hud({ items, activeId, onPick, guide, onDismissGuide, onHelp, onAdmin, drawerOpen }: Props) {
+export default function Hud({ items, activeId, onPick, guide, onDismissGuide, onHelp, onAdmin, onCenter, drawerOpen }: Props) {
   const [notice, setNotice] = useState<string | null>(null)
   return (
     <>
@@ -52,6 +53,11 @@ export default function Hud({ items, activeId, onPick, guide, onDismissGuide, on
       </aside>
 
       {!drawerOpen && <div className="pos-badge"><span className="live" />正站在 · 劳模室入口</div>}
+
+      <button className="panel center-btn" onClick={onCenter} title="回到房间中央">
+        <svg viewBox="0 0 24 24"><path d="m4 11 8-7 8 7M7 10v10h10V10M10 20v-6h4v6" /></svg>
+        回到中央
+      </button>
 
       {notice && <div className="toast">{notice}</div>}
 

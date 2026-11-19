@@ -135,6 +135,29 @@ function Room() {
         <ringGeometry args={[1.2, 1.24, 64]} />
         <meshBasicMaterial color="#2E64B8" transparent opacity={0.25} />
       </mesh>
+      {/* 踢脚线 */}
+      <mesh position={[0, 0.06, -d / 2 + 0.1]}>
+        <boxGeometry args={[w - 0.2, 0.12, 0.04]} />
+        <meshStandardMaterial color="#31445E" roughness={0.7} />
+      </mesh>
+      <mesh position={[0, 0.06, d / 2 - 0.1]}>
+        <boxGeometry args={[w - 0.2, 0.12, 0.04]} />
+        <meshStandardMaterial color="#31445E" roughness={0.7} />
+      </mesh>
+      <mesh position={[-w / 2 + 0.1, 0.06, 0]}>
+        <boxGeometry args={[0.04, 0.12, d - 0.2]} />
+        <meshStandardMaterial color="#31445E" roughness={0.7} />
+      </mesh>
+      <mesh position={[w / 2 - 0.1, 0.06, 0]}>
+        <boxGeometry args={[0.04, 0.12, d - 0.2]} />
+        <meshStandardMaterial color="#31445E" roughness={0.7} />
+      </mesh>
+      {/* 顶部灯带 */}
+      <mesh position={[0, h - 0.06, -d / 2 + 0.08]}>
+        <boxGeometry args={[w - 1.2, 0.035, 0.025]} />
+        <meshStandardMaterial color="#4C7FC8" emissive="#3B82F6" emissiveIntensity={0.9} />
+      </mesh>
+      <spotLight position={[0, h - 0.2, 0]} angle={0.9} penumbra={0.6} intensity={18} color="#CFE3FF" distance={12} decay={2} />
     </group>
   )
 }
