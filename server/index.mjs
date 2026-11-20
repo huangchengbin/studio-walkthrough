@@ -41,6 +41,14 @@ if (fs.existsSync(secretFile)) {
 
 const usersFile = path.join(DATA, 'users.json')
 let users = readJSON(usersFile, null)
+// 设置了环境变量口令时，强制同步（避免沿用首次生成的旧口令）
+if (users && process.env.LAOMO_PASSWORD) {
+  const salt = crypto.randomBytes(16).toString('hex')
+  const hash = crypto.scryptSync(ADMIN_PASSWORD, salt, 64).toString('hex')
+  users[ADMIN_ACCOUNT] = { salt, hash }
+  writeJSON(usersFile, users)
+  console.log('[init] 已按 LAOMO_PASSWORD 同步管理员口令')
+}
 if (!users) {
   const salt = crypto.randomBytes(16).toString('hex')
   const hash = crypto.scryptSync(ADMIN_PASSWORD, salt, 64).toString('hex')
