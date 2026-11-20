@@ -1,11 +1,10 @@
-import { useState } from 'react'
-import type { Achievement } from '../data/mock'
+import type { CatalogItem } from '../data/types'
 
 interface Props {
-  items: Achievement[]
-  drawerOpen?: boolean
+  items: CatalogItem[]
   activeId?: string
-  onPick: (a: Achievement) => void
+  drawerOpen?: boolean
+  onPick: (item: CatalogItem) => void
   guide: boolean
   onDismissGuide: () => void
   onHelp: () => void
@@ -13,8 +12,7 @@ interface Props {
   onCenter: () => void
 }
 
-export default function Hud({ items, activeId, onPick, guide, onDismissGuide, onHelp, onAdmin, onCenter, drawerOpen }: Props) {
-  const [notice, setNotice] = useState<string | null>(null)
+export default function Hud({ items, activeId, drawerOpen, onPick, guide, onDismissGuide, onHelp, onAdmin, onCenter }: Props) {
   return (
     <>
       <header className="topbar">
@@ -37,29 +35,32 @@ export default function Hud({ items, activeId, onPick, guide, onDismissGuide, on
 
       <aside className="panel rail" aria-label="成果目录">
         <div className="rail-title eyebrow">成果目录 · {items.length} 项</div>
-        {items.map((a, i) => (
+        {items.map((item, i) => (
           <button
-            key={a.id}
-            className={'rail-item' + (activeId === a.id ? ' active' : '')}
-            onClick={() => onPick(a)}
+            key={item.uid}
+            className={'rail-item' + (activeId === item.id ? ' active' : '')}
+            onClick={() => onPick(item)}
           >
-            <span className="thumb">{String(i + 1).padStart(2, '0')}</span>
+            <span
+              className="thumb"
+              style={item.thumb ? { backgroundImage: `url(${item.thumb})`, backgroundSize: 'cover' } : undefined}
+            >
+              {!item.thumb && String(i + 1).padStart(2, '0')}
+            </span>
             <span>
-              <strong>{a.name}</strong>
-              <small>{a.category} · 已布展</small>
+              <strong>{item.name}</strong>
+              <small>{item.category} · {item.code}</small>
             </span>
           </button>
         ))}
       </aside>
 
-      {!drawerOpen && <div className="pos-badge"><span className="live" />正站在 · 劳模室入口</div>}
+      {!drawerOpen && <div className="pos-badge"><span className="live" />正站在 · 劳模室</div>}
 
       <button className="panel center-btn" onClick={onCenter} title="回到房间中央">
         <svg viewBox="0 0 24 24"><path d="m4 11 8-7 8 7M7 10v10h10V10M10 20v-6h4v6" /></svg>
         回到中央
       </button>
-
-      {notice && <div className="toast">{notice}</div>}
 
       {guide && (
         <div className="gesture">

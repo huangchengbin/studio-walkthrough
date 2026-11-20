@@ -208,8 +208,8 @@ glb = bytearray()
 glb += struct.pack('<III', 0x46546C67, 2, total)
 glb += struct.pack('<II', len(js_padded), 0x4E4F534A) + js_padded
 glb += struct.pack('<II', len(bin_padded), 0x004E4942) + bin_padded
-(OUT / 'scene.glb').write_bytes(glb)
-print('scene.glb', round(len(glb) / 1024 / 1024, 1), 'MB | nodes', len(gltf_nodes), '| meshes', len(meshes_gltf),
+(OUT / 'v07_scene.glb').write_bytes(glb)
+print('v07_scene.glb', round(len(glb) / 1024 / 1024, 1), 'MB | nodes', len(gltf_nodes), '| meshes', len(meshes_gltf),
       '| materials', len(materials), '| images', len(images))
 
 # ---------- catalog.json ----------
