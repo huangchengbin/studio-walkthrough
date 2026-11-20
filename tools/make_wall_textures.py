@@ -172,9 +172,33 @@ def make_f():
     print('F intro', im.size)
 
 
+
+
+# ---------- A 面：四块竖版标语牌（透明底白字） ----------
+SLOGANS = ['锐意进取', '守正创新', '开拓奋进', '匠心独运']
+
+
+def make_slogans():
+    W, H = 340, 1100
+    f = font(150)
+    for name in SLOGANS:
+        im = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+        d = ImageDraw.Draw(im)
+        # 细白边框
+        d.rounded_rectangle([6, 6, W - 6, H - 6], radius=10, outline=(255, 255, 255, 190), width=4)
+        # 竖排四字
+        step = (H - 190) / len(name)
+        for i, ch in enumerate(name):
+            w = d.textlength(ch, font=f)
+            d.text(((W - w) / 2, 78 + i * step), ch, font=f, fill=(255, 255, 255, 245))
+        im.save(OUT / f'plaque_{SLOGANS.index(name)}.png')
+    print('slogan plaques', len(SLOGANS))
+
+
 if __name__ == '__main__':
     make_a()
     make_b()
     make_c()
     make_f()
+    make_slogans()
     print('textures ->', OUT)

@@ -3,10 +3,12 @@ import type { CatalogItem } from '../data/types'
 
 interface Props {
   item: CatalogItem
+  playing: boolean
+  onTogglePlay: () => void
   onClose: () => void
 }
 
-export default function DetailDrawer({ item, onClose }: Props) {
+export default function DetailDrawer({ item, playing, onTogglePlay, onClose }: Props) {
   const [tab, setTab] = useState<'text' | 'photo'>('text')
   return (
     <aside className="panel drawer" aria-label={item.name}>
@@ -41,7 +43,19 @@ export default function DetailDrawer({ item, onClose }: Props) {
       </div>
 
       <div className="drawer-foot">
-        <p style={{ fontSize: 12, color: 'var(--muted)', textAlign: 'center' }}>该成果暂无功能演示</p>
+        <button className="btn-primary" style={{ width: '100%' }} onClick={onTogglePlay}>
+          {playing ? (
+            <>
+              <svg viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10" rx="1.5" /></svg>
+              停止演示
+            </>
+          ) : (
+            <>
+              <svg viewBox="0 0 24 24"><path d="M9 6.5v11l9-5.5z" /></svg>
+              播放功能演示
+            </>
+          )}
+        </button>
       </div>
     </aside>
   )

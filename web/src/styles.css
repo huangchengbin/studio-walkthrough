@@ -119,3 +119,42 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:900;ba
 
 /* toast */
 .toast{position:absolute;left:50%;bottom:90px;transform:translateX(-50%);z-index:60;background:rgba(8,14,26,.92);border:1px solid rgba(255,255,255,.14);color:#E9EEF6;font-size:12px;padding:9px 16px;border-radius:999px;box-shadow:var(--shadow-1)}
+
+/* ================= 管理端：登录 / 布放编辑 / 成果库 ================= */
+.modal-mask{position:fixed;inset:0;z-index:120;display:grid;place-items:center;background:rgba(4,10,22,.55)}
+.modal{width:400px;max-width:calc(100vw - 32px);padding:26px 24px 22px;border-radius:var(--r-panel)}
+.modal h2{font-weight:650;letter-spacing:.02em}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.field>span{font-size:12px;color:var(--muted);letter-spacing:.04em}
+.err-text{font-size:12px;color:var(--err);margin-top:2px}
+
+.editbar{position:fixed;top:84px;left:50%;transform:translateX(-50%);z-index:40;display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:12px}
+.editbar-tag{white-space:nowrap;font-size:11px;letter-spacing:.06em;padding:4px 9px;border-radius:999px;background:rgba(59,130,246,.18);color:#9DC2FF;border:1px solid rgba(59,130,246,.35)}
+.editbar-btn{display:flex;align-items:center;gap:6px;height:32px;padding:0 10px;white-space:nowrap;border-radius:var(--r-ctl);border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);color:var(--sub);font-size:12px;cursor:pointer;transition:background .15s,color .15s}
+.editbar-btn:hover:not(:disabled){background:rgba(255,255,255,.1);color:#fff}
+.editbar-btn:disabled{opacity:.4;cursor:not-allowed}
+.editbar-btn.active{background:#fff;color:#12386E}
+.editbar-btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.editbar-sep{width:1px;height:20px;background:rgba(255,255,255,.14);margin:0 2px}
+.editbar-sel{font-size:12px;color:var(--muted);max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.editbar-dirty{font-size:12px;color:var(--warn)}
+.editbar .btn-primary,.editbar .btn-outline{height:32px;padding:0 14px;font-size:12px;white-space:nowrap}
+
+.library{position:fixed;right:24px;top:140px;bottom:24px;width:340px;z-index:35;display:flex;flex-direction:column;padding:14px;border-radius:var(--r-panel)}
+.library-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}
+.library-list{flex:1;overflow:auto;display:flex;flex-direction:column;gap:6px}
+.library-item{display:flex;align-items:center;gap:10px;padding:7px 8px;border-radius:10px;border:1px solid transparent;background:rgba(255,255,255,.03);cursor:pointer;text-align:left}
+.library-item:hover{background:rgba(255,255,255,.07)}
+.library-item.active{background:#fff;border-color:#fff}
+.library-item.active strong{color:#12386E}
+.library-item.active small{color:#5B7CA6}
+.library-thumb{flex:0 0 44px;height:44px;border-radius:8px;background:rgba(255,255,255,.08) center/cover no-repeat;border:1px solid rgba(255,255,255,.12)}
+.library-meta{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.library-meta strong{font-size:12.5px;color:var(--ink);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.library-meta small{font-size:11px;color:var(--muted)}
+.library-state{font-size:10px;padding:3px 7px;border-radius:999px;background:rgba(59,130,246,.16);color:#9DC2FF;white-space:nowrap}
+.library-item.active .library-state{background:rgba(18,56,110,.1);color:#2563EB}
+.library-tip{margin-top:10px;font-size:11px;color:var(--muted);line-height:1.5}
+.input{height:38px;border-radius:var(--r-ctl);border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);color:var(--ink);font-size:13px;padding:0 12px;outline:none;transition:border-color .15s,box-shadow .15s}
+.input:focus{border-color:#3B82F6;box-shadow:0 0 0 3px rgba(59,130,246,.22)}
+.input::placeholder{color:var(--muted)}

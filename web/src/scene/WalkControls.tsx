@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import type { FlyTarget } from '../App'
+import { editBus } from './editBus'
 
 interface Obstacle { x: number; z: number; r: number }
 
@@ -13,10 +14,12 @@ export default function WalkControls({
   fly,
   obstacles,
   onFlyDone,
+  lookEnabled = true,
 }: {
   fly: FlyTarget | null
   obstacles: Obstacle[]
   onFlyDone: () => void
+  lookEnabled?: boolean
 }) {
   const { camera, gl } = useThree()
   const keys = useRef<Record<string, boolean>>({})
@@ -32,6 +35,7 @@ export default function WalkControls({
   useEffect(() => {
     const dom = gl.domElement
     const down = (e: PointerEvent) => {
+      if (!lookEnabled || editBus.draggingItem) return
       dragging.current = true
       last.current = [e.clientX, e.clientY]
       dom.setPointerCapture(e.pointerId)
@@ -76,7 +80,7 @@ export default function WalkControls({
       window.removeEventListener('keydown', kd)
       window.removeEventListener('keyup', ku)
     }
-  }, [camera, gl])
+  }, [camera, gl, lookEnabled])
 
   useEffect(() => {
     if (fly) {

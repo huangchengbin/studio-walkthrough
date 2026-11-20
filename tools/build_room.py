@@ -166,20 +166,43 @@ decal_y("b_title", 0.045, 1.65, 4.55, 2.48, 2.90, f"{TEX}/wall_b_title.png", alp
 for ti, (tx0, tx1) in enumerate([(1.30, 2.66), (3.54, 4.90)]):
     box(f"b_tv{ti}_frame", tx0, tx1, 0.03, 0.08, 1.26, 2.10, TVFRAME)
     box(f"b_tv{ti}_screen", tx0 + 0.03, tx1 - 0.03, 0.02, 0.031, 1.30, 2.06, TVSCREEN)
-# A 面（西墙）：绿色山峦壁画（真实素材）
-decal_x("a_mural", 0.02, 0.02, 5.03, 0.02, H - 0.03, f"{TEX}/wall_a_mural.jpg")
-# C 面（荣誉展示墙）：标题
+# A 面（西墙）：绿色山峦壁画（真实素材）+ 右侧四块竖版标语牌
+decal_x("a_mural", 0.02, 0.02, 3.85, 0.02, H - 0.03, f"{TEX}/wall_a_mural.jpg")
+PLAQUE = mat("plaque_green", (0.045, 0.21, 0.17), 0.55)
+for idx, (py0, pz0) in enumerate([
+    (3.98, 1.95), (4.46, 1.95), (3.98, 0.90), (4.46, 0.90),
+]):
+    box(f"plaque_{idx}", 0.004, 0.032, py0, py0 + 0.30, pz0, pz0 + 0.95, PLAQUE)
+    decal_x(f"plaque_{idx}_text", 0.035, py0, py0 + 0.30, pz0, pz0 + 0.95,
+            f"{TEX}/plaque_{idx}.png", alpha=True)
+# C 面（荣誉展示墙）：标题 + 层板 + 荣誉证书 + 奖牌 + 内嵌画框
 decal_y("c_title", 4.71, 5.1, 6.7, 2.5, 2.82, f"{TEX}/wall_c_title.png", alpha=True, flip_u=False)
-# F 面（北墙）：白色简介板 + 细框
-box("f_board", 0.35, 5.85, 8.33, 8.36, 0.25, 2.95, mat("board_white", (0.90, 0.915, 0.93), 0.6))
-decal_y("f_intro", 8.328, 0.36, 5.84, 0.26, 2.94, f"{TEX}/wall_f_intro.jpg", flip_u=False)
-box("f_frame_top", 0.3, 5.9, 8.32, 8.35, 2.95, 3.0, GREEN)
-box("f_frame_bottom", 0.3, 5.9, 8.32, 8.35, 0.2, 0.25, GREEN)
-# E 面（主厅东墙）：3×3 拼接屏
-for i in range(3):
-    for j in range(3):
-        box(f"e_screen_{i}{j}", 7.46, 7.48, 5.75 + j * 0.72, 5.75 + j * 0.72 + 0.66,
-            0.85 + i * 0.55, 0.85 + i * 0.55 + 0.5, SCREEN)
+RED = mat("cert_red", (0.42, 0.05, 0.045), 0.6)
+GOLD = mat("medal_gold", (0.62, 0.46, 0.12), 0.35, 0.7)
+FRAMEDARK = mat("frame_dark", (0.05, 0.06, 0.07), 0.5)
+FRAMEIN = mat("frame_inner", (0.20, 0.20, 0.18), 0.6)
+# 三层浅灰层板（从墙面伸出 0.28m，与白墙拉开一档）
+SHELF = mat("shelf_gray", (0.84, 0.85, 0.865), 0.55)
+for si, sz in enumerate([2.14, 1.84, 1.58]):
+    box(f"c_shelf{si}", 4.95, 6.95, 4.44, 4.72, sz, sz + 0.035, SHELF)
+# 第一层：整排红色荣誉证书（高低宽窄略有差异，像一叠册子）
+import random
+random.seed(7)
+for ci in range(18):
+    x0 = 4.99 + ci * 0.048
+    ch = 0.26 + random.uniform(0, 0.07)
+    cw = 0.038 + random.uniform(0, 0.008)
+    tint = 0.36 + random.uniform(0, 0.10)
+    cmat = mat(f"cert_{ci}", (tint, 0.045, 0.04), 0.6)
+    box(f"c_cert_{ci}", x0, x0 + cw, 4.49, 4.67, 2.175, 2.175 + ch, cmat)
+# 第二层：奖牌 / 荣誉盒（红底 + 金面）
+for mi, (mx, mw) in enumerate([(5.20, 0.30), (5.62, 0.26), (5.98, 0.30), (6.38, 0.24)]):
+    box(f"c_medal_{mi}_base", mx, mx + mw, 4.49, 4.67, 1.875, 2.10, RED)
+    box(f"c_medal_{mi}_plate", mx + 0.04, mx + mw - 0.04, 4.475, 4.49, 1.93, 2.04, GOLD)
+# 两个内嵌画框（深框 + 内衬）
+for fi, fx in enumerate([5.02, 6.02]):
+    box(f"c_frame_{fi}", fx, fx + 0.86, 4.66, 4.71, 0.95, 1.52, FRAMEDARK)
+    box(f"c_frame_{fi}_inner", fx + 0.05, fx + 0.81, 4.645, 4.655, 1.00, 1.47, FRAMEIN)
 
 # ---------- 5) 展台 / 家具 ----------
 plinth_h = 0.88
