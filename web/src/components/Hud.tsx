@@ -10,9 +10,10 @@ interface Props {
   onHelp: () => void
   onAdmin: () => void
   onCenter: () => void
+  onTour: () => void
 }
 
-export default function Hud({ items, activeId, drawerOpen, onPick, guide, onDismissGuide, onHelp, onAdmin, onCenter }: Props) {
+export default function Hud({ items, activeId, drawerOpen, onPick, guide, onDismissGuide, onHelp, onAdmin, onCenter, onTour }: Props) {
   return (
     <>
       <header className="topbar">
@@ -26,6 +27,10 @@ export default function Hud({ items, activeId, drawerOpen, onPick, guide, onDism
           </div>
         </div>
         <div className="top-actions">
+          <button className="btn-outline tour-btn" onClick={onTour}>
+            <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h10M4 18h7" /><circle cx="17" cy="15" r="4" /><path d="m16 14 3 1-3 1z" /></svg>
+            自动导览
+          </button>
           <button className="icon-btn" aria-label="操作帮助" title="操作帮助" onClick={onHelp}>
             <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path d="M9.5 9a2.5 2.5 0 1 1 3.2 2.4c-.7.2-.7 1-.7 1.6M12 16h.01" /></svg>
           </button>

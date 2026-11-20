@@ -167,3 +167,15 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:900;ba
 .library-action.primary{background:#fff;border-color:#fff;color:#12386E;font-weight:600}
 .library-action.primary:hover{background:#EEF4FF}
 .library-item.active .library-action:not(.primary){border-color:rgba(18,56,110,.25);color:#12386E}
+
+/* 自动导览 */
+.tour-btn{display:inline-flex;align-items:center;gap:6px}
+.tour-btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tourbar{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);z-index:45;width:420px;padding:14px 16px 12px;border-radius:14px}
+.tourbar-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.tour-step{font-size:11px;letter-spacing:.08em;color:#9DC2FF;background:rgba(59,130,246,.16);border:1px solid rgba(59,130,246,.3);padding:3px 8px;border-radius:999px}
+.tour-title{display:block;font-size:15px;font-weight:650;letter-spacing:.02em;color:var(--ink);margin-bottom:6px}
+.tour-caption{font-size:12.5px;line-height:1.6;color:var(--sub);max-height:60px;overflow:auto;margin-bottom:12px}
+.tour-actions{display:flex;gap:10px}
+.tour-actions .btn-outline{flex:0 0 96px}
+.tour-actions .btn-primary{flex:1}

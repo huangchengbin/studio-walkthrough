@@ -8,6 +8,8 @@ import Loading from './components/Loading'
 import AdminLogin from './components/AdminLogin'
 import EditBar from './components/EditBar'
 import LibraryPanel from './components/LibraryPanel'
+import TourBar from './components/TourBar'
+import { buildTour } from './data/tour'
 import type { Catalog, CatalogItem } from './data/types'
 
 const WEBGL_OK = (() => {
@@ -53,6 +55,10 @@ export default function App() {
   const [dirty, setDirty] = useState(false)
   const [libraryOpen, setLibraryOpen] = useState(false)
   const expRef = useRef<EditApi>(null)
+  const [tourIndex, setTourIndex] = useState<number | null>(null)
+  const tourIndexRef = useRef<number | null>(null)
+  tourIndexRef.current = tourIndex
+  const gotoRef = useRef<(i: number) => void>(() => {})
 
   // 布展状态：目录默认值 + 本次调整
   const placedMap = useMemo(() => {
@@ -64,6 +70,8 @@ export default function App() {
   }, [catalog, layout])
 
   const viewItems = (catalog?.items ?? []).filter((i) => placedMap[i.id])
+
+  const tour = useMemo(() => buildTour(viewItems, layout), [viewItems, layout])
   const { active, progress } = useProgress()
 
   useEffect(() => {
@@ -95,6 +103,11 @@ export default function App() {
       if (e.key === 'Escape') {
         setSelected(null)
         setPlaying(null)
+        setTourIndex(null)
+      }
+      if (tourIndexRef.current !== null) {
+        if (e.key === 'ArrowRight') gotoRef.current(tourIndexRef.current + 1)
+        if (e.key === 'ArrowLeft') gotoRef.current(tourIndexRef.current - 1)
       }
     }
     window.addEventListener('keydown', h)
@@ -125,6 +138,28 @@ export default function App() {
     if (editSelected === item.id) setEditSelected(null)
     setDirty(true)
     showToast(`已撤展：${item.name}`)
+  }
+
+  const gotoStep = (i: number) => {
+    if (!tour.length) return
+    const idx = Math.max(0, Math.min(tour.length - 1, i))
+    const vp = tour[idx]
+    setTourIndex(idx)
+    setSelected(null)
+    setPlaying(null)
+    setFly({ pos: vp.pos, look: vp.look, key: Date.now() })
+  }
+
+  gotoRef.current = gotoStep
+
+  const startTour = () => {
+    if (editMode) return
+    gotoStep(0)
+  }
+
+  const exitTour = () => {
+    setTourIndex(null)
+    goCenter()
   }
 
   const saveLayout = () => {
@@ -190,6 +225,7 @@ export default function App() {
           }}
           onHelp={() => setGuide(true)}
           onAdmin={() => (editMode ? exitEdit() : setAdminOpen(true))}
+          onTour={startTour}
           onCenter={goCenter}
           drawerOpen={!!selected || editMode}
         />
@@ -219,6 +255,18 @@ export default function App() {
             setPlaying(null)
             showToast('已进入布放编辑模式')
           }}
+        />
+      )}
+
+      {tourIndex !== null && tour[tourIndex] && (
+        <TourBar
+          index={tourIndex}
+          total={tour.length}
+          title={tour[tourIndex].title}
+          caption={tour[tourIndex].caption}
+          onPrev={() => gotoStep(tourIndex - 1)}
+          onNext={() => (tourIndex === tour.length - 1 ? exitTour() : gotoStep(tourIndex + 1))}
+          onExit={exitTour}
         />
       )}
 
