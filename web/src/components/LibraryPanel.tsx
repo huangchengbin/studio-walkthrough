@@ -7,11 +7,15 @@ interface Props {
   onPick: (item: CatalogItem) => void
   onPlace: (item: CatalogItem) => void
   onRemove: (item: CatalogItem) => void
+  onReplaceModel: (item: CatalogItem, file: File) => void
+  onReplacePhoto: (item: CatalogItem, file: File) => void
+  onResetModel: (item: CatalogItem) => void
   onClose: () => void
 }
 
-export default function LibraryPanel({ items, placed, selectedId, onPick, onPlace, onRemove, onClose }: Props) {
+export default function LibraryPanel({ items, placed, selectedId, onPick, onPlace, onRemove, onReplaceModel, onReplacePhoto, onResetModel, onClose }: Props) {
   const placedCount = items.filter((i) => placed[i.id]).length
+  const selectedItem = items.find((i) => i.id === selectedId) ?? null
 
   return (
     <aside className="panel library" aria-label="成果库">
@@ -49,7 +53,42 @@ export default function LibraryPanel({ items, placed, selectedId, onPick, onPlac
         })}
       </div>
 
-      <p className="library-tip">点选成果可在场景中直接拖动位置、用工具条旋转；「撤展」只收起模型，不删除数据</p>
+      {selectedItem && (
+        <div className="library-tools">
+          <div className="library-tools-title">替换「{selectedItem.name}」的资产</div>
+          <div className="library-tools-row">
+            <label className="library-action">
+              替换模型
+              <input
+                type="file"
+                accept=".glb,.gltf,model/gltf-binary"
+                hidden
+                onChange={(e) => {
+                  const f = e.target.files?.[0]
+                  if (f) onReplaceModel(selectedItem, f)
+                  e.currentTarget.value = ''
+                }}
+              />
+            </label>
+            <label className="library-action">
+              替换照片
+              <input
+                type="file"
+                accept="image/*"
+                hidden
+                onChange={(e) => {
+                  const f = e.target.files?.[0]
+                  if (f) onReplacePhoto(selectedItem, f)
+                  e.currentTarget.value = ''
+                }}
+              />
+            </label>
+            <button className="library-action" onClick={() => onResetModel(selectedItem)}>恢复原模型</button>
+          </div>
+        </div>
+      )}
+
+      <p className="library-tip">点选成果可拖动位置、用工具条旋转；替换的模型与照片存在本机浏览器，接后端后改为服务端存储</p>
     </aside>
   )
 }

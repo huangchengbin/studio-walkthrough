@@ -10,6 +10,7 @@ import EditBar from './components/EditBar'
 import LibraryPanel from './components/LibraryPanel'
 import TourBar from './components/TourBar'
 import { buildTour } from './data/tour'
+import { loadModels, loadPhotos, removeModel, saveModel, savePhoto } from './data/localAssets'
 import type { Catalog, CatalogItem } from './data/types'
 
 const WEBGL_OK = (() => {
@@ -56,6 +57,7 @@ export default function App() {
   const [libraryOpen, setLibraryOpen] = useState(false)
   const expRef = useRef<EditApi>(null)
   const [tourIndex, setTourIndex] = useState<number | null>(null)
+  const [models, setModels] = useState<Record<string, Blob>>({})
   const tourIndexRef = useRef<number | null>(null)
   tourIndexRef.current = tourIndex
   const gotoRef = useRef<(i: number) => void>(() => {})
@@ -77,8 +79,16 @@ export default function App() {
   useEffect(() => {
     fetch('/assets/catalog.json')
       .then((r) => r.json())
-      .then(setCatalog)
+      .then(async (cat: Catalog) => {
+        // 合并本地上传的照片
+        const photos: Record<string, string> = await loadPhotos().catch(() => ({}))
+        if (Object.keys(photos).length) {
+          cat.items = cat.items.map((it) => (photos[it.id] ? { ...it, photo: photos[it.id] } : it))
+        }
+        setCatalog(cat)
+      })
       .catch(() => setToast('成果数据加载失败'))
+    loadModels().then(setModels).catch(() => {})
   }, [])
 
   const loading = !catalog || (active && progress < 100)
@@ -162,6 +172,38 @@ export default function App() {
     goCenter()
   }
 
+  const replaceModel = async (item: CatalogItem, file: File) => {
+    await saveModel(item.id, file)
+    setModels((prev) => ({ ...prev, [item.id]: file }))
+    setEditSelected(item.id)
+    showToast(`已替换模型：${item.name}`)
+  }
+
+  const replacePhoto = (item: CatalogItem, file: File) => {
+    const reader = new FileReader()
+    reader.onload = async () => {
+      const dataUrl = String(reader.result)
+      await savePhoto(item.id, dataUrl)
+      setCatalog((prev) => prev ? {
+        ...prev,
+        items: prev.items.map((it) => (it.id === item.id ? { ...it, photo: dataUrl } : it)),
+      } : prev)
+      showToast(`已替换照片：${item.name}`)
+    }
+    reader.readAsDataURL(file)
+  }
+
+  const resetModel = async (item: CatalogItem) => {
+    await removeModel(item.id)
+    setModels((prev) => {
+      const next = { ...prev }
+      delete next[item.id]
+      return next
+    })
+    showToast('已恢复原模型，正在重新载入…')
+    window.setTimeout(() => window.location.reload(), 600)
+  }
+
   const saveLayout = () => {
     localStorage.setItem(LAYOUT_KEY, JSON.stringify(layout))
     setDirty(false)
@@ -191,7 +233,7 @@ export default function App() {
   }
 
   return (
-    <div className="app">
+    <div className={`app${libraryOpen ? ' library-open' : ''}`}>
       <Canvas flat shadows camera={{ fov: 78, position: START }} dpr={[1, window.innerWidth < 820 ? 1.5 : 2]} gl={{ antialias: true }}>
         {catalog && (
           <Experience
@@ -203,6 +245,7 @@ export default function App() {
             editMode={editMode}
             selectedId={editSelected}
             layout={layout}
+            models={models}
             onSelect={setEditSelected}
             onMoved={(id, p) => {
               setLayout((prev) => ({ ...prev, [id]: p }))
@@ -290,6 +333,9 @@ export default function App() {
           onPick={(item) => setEditSelected(item.id)}
           onPlace={placeItem}
           onRemove={removeItem}
+          onReplaceModel={replaceModel}
+          onReplacePhoto={replacePhoto}
+          onResetModel={resetModel}
           onClose={() => setLibraryOpen(false)}
         />
       )}
