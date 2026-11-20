@@ -122,6 +122,8 @@ export default function App() {
       {selected && (
         <DetailDrawer
           item={selected}
+          playing={playing === selected.id}
+          onTogglePlay={() => setPlaying((p) => (p === selected.id ? null : selected.id))}
           onClose={() => {
             setSelected(null)
             setPlaying(null)

@@ -1,5 +1,6 @@
 import { Suspense, useEffect, useMemo, useRef } from 'react'
 import { Html, useGLTF } from '@react-three/drei'
+import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import WalkControls from './WalkControls'
 import type { CatalogItem } from '../data/types'
@@ -27,7 +28,15 @@ function Hotspot({ item, index, onPick }: { item: CatalogItem; index: number; on
   )
 }
 
-function Scene() {
+interface AnimState {
+  group: THREE.Object3D
+  baseY: number
+  baseRotY: number
+  kids: { obj: THREE.Object3D; baseX: number }[]
+  t: number
+}
+
+function Scene({ playing }: { playing: string | null }) {
   const { scene } = useGLTF('/assets/scene.glb')
   useMemo(() => {
     scene.traverse((o) => {
@@ -40,6 +49,42 @@ function Scene() {
       }
     })
   }, [scene])
+
+  const anim = useRef<AnimState | null>(null)
+
+  // 播放/停止：找出对应的摆放节点（place-<id>），记录基准位姿
+  useEffect(() => {
+    const prev = anim.current
+    if (prev) {
+      prev.group.rotation.y = prev.baseRotY
+      prev.group.position.y = prev.baseY
+      prev.kids.forEach((k) => { k.obj.position.x = k.baseX })
+      anim.current = null
+    }
+    if (!playing) return
+    const g = scene.getObjectByName(`place-${playing}`)
+    if (!g) return
+    anim.current = {
+      group: g,
+      baseY: g.position.y,
+      baseRotY: g.rotation.y,
+      kids: g.children.map((o) => ({ obj: o, baseX: o.position.x })),
+      t: 0,
+    }
+  }, [playing, scene])
+
+  // 演示动画：缓慢自转 + 轻微上浮 + 部件微分离（示意"运转/拆解"）
+  useFrame((_, dt) => {
+    const a = anim.current
+    if (!a) return
+    a.t += dt
+    a.group.rotation.y = a.baseRotY + a.t * 0.85
+    a.group.position.y = a.baseY + Math.sin(a.t * 1.8) * 0.03
+    a.kids.forEach((k, i) => {
+      k.obj.position.x = k.baseX + Math.sin(a.t * 2 + i) * 0.022
+    })
+  })
+
   return <primitive object={scene} />
 }
 
@@ -86,7 +131,7 @@ export default function Experience({ items, fly, playing, onPick, onFlyDone }: P
       />
       <directionalLight position={[-6, 7, -7]} intensity={0.25} color="#F6F9FF" />
       <Suspense fallback={null}>
-        <Scene />
+        <Scene playing={playing} />
       </Suspense>
       {items.map((item, i) => (
         <Hotspot key={item.uid} item={item} index={i} onPick={() => onPick(item)} />
