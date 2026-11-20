@@ -51,5 +51,19 @@ main ─────────────────────────
 
 ## 六、备份
 
-- 远端：GitHub 私有仓库（TODO：填仓库地址）
+- 远端：GitHub `https://github.com/huangchengbin/studio-walkthrough`（main 已接入，远端为 githubfast 代理，仓库级凭据助手已配）
 - 每完成一个阶段推送并打 tag；重要节点额外本地导出一份 zip 存移动硬盘。
+
+## 七、本地开发（web 前端，spec-001 起）
+
+```bash
+cd web
+npm install            # 首次；国内可用 --registry=https://registry.npmmirror.com
+npm run dev            # http://localhost:5173
+npm run build          # tsc --noEmit + vite build
+```
+
+- 当前为**真实场景资产**：`web/public/assets/scene.glb` 由 V07 scene.gz 转换 + Blender 加工生成（见 spec-002 与 tools/），`catalog.json` 提供 6 件已摆放成果数据；前端加载路径 `/assets/scene.glb`。
+- 重新生成资产（clone 后必做，生成物不入库）：`python3 tools/scene2glb.py` → `Blender -b -P tools/blender_process.py`（第二次导出覆盖为最终版）。
+- 成果数据现为 `catalog.json`（6 条，含实景照片），spec-003 接入管理端与后端后改为接口数据。
+- 交互口径：WASD/方向键移动、拖拽环视、滚轮推拉；成果目录点击 → 镜头飞行 + 打开浮层；热点编号与目录顺序一致。

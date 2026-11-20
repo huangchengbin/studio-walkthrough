@@ -1,7 +1,7 @@
 # LaoMoSHi_show
 
 > 一句话定位：**劳模室 3D 线上展厅——给领导与嘉宾的浏览器漫游参观工具**（详见 `docs/product/overview.md`，产品定位只在那一份描述）。
-> 当前阶段：**第 3 期 · SPEC 化开发（视觉 v4.3 已定版并打 tag `stage-2-visual-system`；spec-001 待确认）**
+> 当前阶段：**第 3 期 · 开发中（spec-002 真实场景资产已接入：V07 几何 → Blender 加工 → glTF；spec-001 待复核合并）**
 
 ## 开工顺序（不可跳步）
 
@@ -18,7 +18,7 @@
 | 9 | 组件与参考站接入 | H | `design.md` 补充 + 引用清单 | ✅ 已完成 |
 | 10 | 三方向比稿 | I | `design-lab/` | ✅ 已完成（选方向 C 指挥台框景，`design-lab/full/` 六屏已扩展） |
 | 11 | 规范自检页 | J | `docs/design-preview.html` | ✅ 已完成 |
-| 12 | SPEC 化后开发 | —— | `docs/specs/spec-001-*.md` | 🟡 spec-001 已起草，待确认后开工 |
+| 12 | SPEC 化后开发 | —— | `docs/specs/spec-00*.md` + `web/` | 🟡 漫游跑通 + 真实场景资产接入（V07→Blender→glTF） |
 
 ## 目录
 
