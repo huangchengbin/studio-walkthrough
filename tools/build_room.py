@@ -35,6 +35,66 @@ DARK = mat("rack_dark", (0.12, 0.14, 0.17), 0.45, 0.3)
 SCREEN = mat("screen", (0.05, 0.1, 0.2), 0.3, 0.1, emit=(0.15, 0.35, 0.85), emit_strength=1.2)
 LAMP = mat("ceiling_lamp", (1, 1, 1), 0.9, 0, emit=(1, 0.98, 0.92), emit_strength=3.0)
 CHAIR = mat("chair", (0.30, 0.32, 0.35), 0.7)
+TVFRAME = mat("tv_frame", (0.045, 0.05, 0.06), 0.5)
+TVSCREEN = mat("tv_screen", (0.015, 0.02, 0.035), 0.25, 0.1, emit=(0.05, 0.12, 0.22), emit_strength=0.6)
+
+
+TEX = "/Users/admin/Desktop/LaoMoSHi_show/web/public/assets/textures"
+
+def tex_mat(name, img_path, alpha=False):
+    """带贴图的材质：图片 → Principled base color。"""
+    m = bpy.data.materials.get(name)
+    if m: return m
+    m = bpy.data.materials.new(name)
+    m.use_nodes = True
+    m.use_backface_culling = False
+    nt = m.node_tree
+    bsdf = nt.nodes.get("Principled BSDF")
+    tex = nt.nodes.new("ShaderNodeTexImage")
+    tex.location = (-360, 220)
+    tex.image = bpy.data.images.load(img_path)
+    tex.image.colorspace_settings.name = 'sRGB'
+    nt.links.new(tex.outputs["Color"], bsdf.inputs["Base Color"])
+    bsdf.inputs["Roughness"].default_value = 0.8
+    if alpha:
+        nt.links.new(tex.outputs["Alpha"], bsdf.inputs["Alpha"])
+        m.blend_method = 'BLEND'
+        m.show_transparent_back = False
+    m["tex"] = img_path
+    return m
+
+
+def quad(name, verts, material, uvs=((0, 0), (1, 0), (1, 1), (0, 1))):
+    """四点面片（verts 顺序需保证法线朝房间内）。"""
+    me = bpy.data.meshes.new(name + "_mesh")
+    me.from_pydata(verts, [], [(0, 1, 2, 3)])
+    me.update()
+    uvl = me.uv_layers.new(name="UVMap")
+    for i, uv in enumerate(uvs):
+        uvl.data[i].uv = uv
+    ob = bpy.data.objects.new(name, me)
+    bpy.context.collection.objects.link(ob)
+    ob.data.materials.append(material)
+    return ob
+
+
+def decal_x(name, x, y0, y1, z0, z1, img, alpha=False):
+    """竖直面片，法线朝 +X（贴在西墙上）。"""
+    return quad(name, [(x, y0, z0), (x, y1, z0), (x, y1, z1), (x, y0, z1)],
+                tex_mat(name + "_mat", img, alpha))
+
+
+def decal_y(name, y, x0, x1, z0, z1, img, alpha=False, flip_u=True):
+    """竖直面片，法线朝 -Y。
+
+    观察方向决定 U 轴是否翻转：
+    - 南墙（B 面，y≈0）：相机在 +Y 侧看，需翻转
+    - 北墙（F 面）与 C 面：相机在 -Y 侧看，不翻转
+    """
+    uvs = ((1, 0), (0, 0), (0, 1), (1, 1)) if flip_u else ((0, 0), (1, 0), (1, 1), (0, 1))
+    return quad(name, [(x0, y, z0), (x1, y, z0), (x1, y, z1), (x0, y, z1)],
+                tex_mat(name + "_mat", img, alpha), uvs=uvs)
+
 
 def box(name, x0, x1, y0, y1, z0, z1, material):
     bpy.ops.mesh.primitive_cube_add(size=1, location=((x0+x1)/2, (y0+y1)/2, (z0+z1)/2))
@@ -101,10 +161,18 @@ box("skirt_north", 0, 6.1, 8.365, 8.39, 0, 0.13, SKIRT)
 box("skirt_west", 0.01, 0.035, 0, 8.4, 0, 0.13, SKIRT)
 
 # ---------- 4) 展面处理 ----------
-# B 面（南墙）：国网绿展墙
-box("b_green", 0.05, 6.1, 0.02, 0.06, 0.1, H - 0.05, GREEN)
+# B 面（南墙）：白墙 + 绿色标题带 + 两台电视（对齐现场照片）
+decal_y("b_title", 0.045, 1.65, 4.55, 2.48, 2.90, f"{TEX}/wall_b_title.png", alpha=True)
+for ti, (tx0, tx1) in enumerate([(1.30, 2.66), (3.54, 4.90)]):
+    box(f"b_tv{ti}_frame", tx0, tx1, 0.03, 0.08, 1.26, 2.10, TVFRAME)
+    box(f"b_tv{ti}_screen", tx0 + 0.03, tx1 - 0.03, 0.02, 0.031, 1.30, 2.06, TVSCREEN)
+# A 面（西墙）：绿色山峦壁画（真实素材）
+decal_x("a_mural", 0.02, 0.02, 5.03, 0.02, H - 0.03, f"{TEX}/wall_a_mural.jpg")
+# C 面（荣誉展示墙）：标题
+decal_y("c_title", 4.71, 5.1, 6.7, 2.5, 2.82, f"{TEX}/wall_c_title.png", alpha=True, flip_u=False)
 # F 面（北墙）：白色简介板 + 细框
 box("f_board", 0.35, 5.85, 8.33, 8.36, 0.25, 2.95, mat("board_white", (0.90, 0.915, 0.93), 0.6))
+decal_y("f_intro", 8.328, 0.36, 5.84, 0.26, 2.94, f"{TEX}/wall_f_intro.jpg", flip_u=False)
 box("f_frame_top", 0.3, 5.9, 8.32, 8.35, 2.95, 3.0, GREEN)
 box("f_frame_bottom", 0.3, 5.9, 8.32, 8.35, 0.2, 0.25, GREEN)
 # E 面（主厅东墙）：3×3 拼接屏
