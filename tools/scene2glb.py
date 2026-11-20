@@ -6,7 +6,7 @@
 import gzip, json, base64, struct, array, pathlib
 
 SRC = '/Users/admin/Desktop/LaoMoSHi_show/source/data/scene.gz'
-OUT = pathlib.Path('/Users/admin/Desktop/LaoMoSHi_show/web/public/assets')
+OUT = pathlib.Path('/Users/admin/Desktop/LaoMoSHi_show/assets-build')
 OUT.mkdir(parents=True, exist_ok=True)
 
 d = json.loads(gzip.open(SRC, 'rb').read())

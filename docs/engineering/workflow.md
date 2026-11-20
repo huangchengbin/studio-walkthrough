@@ -65,10 +65,10 @@ npm run build          # tsc --noEmit + vite build
 
 - 当前为**真实场景资产**：`web/public/assets/scene.glb` 由 V07 scene.gz 转换 + Blender 加工生成（见 spec-002 与 tools/），`catalog.json` 提供 6 件已摆放成果数据；前端加载路径 `/assets/scene.glb`。
 - 重新生成资产（clone 后必做，生成物不入库）：
-  1. `python3 tools/scene2glb.py` → 产出 `web/public/assets/v07_scene.glb`（V07 原始几何+成果，仅作素材源）
+  1. `python3 tools/scene2glb.py` → 产出 `assets-build/v07_scene.glb` 与 `assets-build/catalog.json`（V07 原始几何+22 项成果，仅作素材源）
   2. `python3 tools/make_wall_textures.py` → 生成墙面贴图 `web/public/assets/textures/`（A 面壁画取 V07 textures.mural，B/C/F 按现场照片重绘标题与版式）
-  3. `Blender -b -P tools/build_room.py` → 参数化重建 L 形房间 + 贴图，产出 `scene_new.glb`（自动剔除 environment-* 环境网格，只留成果）
-  4. `cp web/public/assets/scene_new.glb web/public/assets/scene.glb` → 前端加载的最终资产
+  3. `Blender -b -P tools/build_room.py` → 参数化重建 L 形房间 + 贴图，产出 `assets-build/scene_new.glb`（自动剔除 environment-* 环境网格，只留成果）
+  4. `cp assets-build/scene_new.glb web/public/assets/scene.glb`、`cp assets-build/catalog.json web/public/assets/catalog.json` → 前端加载的最终资产
   > 注意：`build_room.py` 只从 `v07_scene.glb` 取成果模型。若误指向 `scene.glb`，会把整套房间重复导入。
 - 成果数据现为 `catalog.json`（6 条，含实景照片），spec-003 接入管理端与后端后改为接口数据。
 - 交互口径：WASD/方向键移动、拖拽环视、滚轮推拉；成果目录点击 → 镜头飞行 + 打开浮层；热点编号与目录顺序一致。

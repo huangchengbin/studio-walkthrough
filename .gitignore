@@ -38,3 +38,9 @@ assets-source/
 # 后端依赖与运行时数据（含密钥、口令哈希、上传文件）
 server/node_modules/
 server/data/
+
+# 构建中间件（V07 转换件、Blender 输出），发布前拷到 web/public/assets/scene.glb
+assets-build/
+
+# 发布包（由 web/dist + server 组装，构建产物）
+deploy/

@@ -3,8 +3,8 @@ import bpy, math, os
 # 先清空场景，再建材质（否则材质引用失效）
 bpy.ops.wm.read_factory_settings(use_empty=True)
 
-SRC_ITEMS = "/Users/admin/Desktop/LaoMoSHi_show/web/public/assets/v07_scene.glb"  # V07 原始转换件（仅取其中成果实例）
-DST = "/Users/admin/Desktop/LaoMoSHi_show/web/public/assets/scene_new.glb"
+SRC_ITEMS = "/Users/admin/Desktop/LaoMoSHi_show/assets-build/v07_scene.glb"  # V07 原始转换件（仅取其中成果实例）
+DST = "/Users/admin/Desktop/LaoMoSHi_show/assets-build/scene_new.glb"
 RENDER_TOP = "/tmp/room_top.png"
 RENDER_IN = "/tmp/room_in.png"
 
