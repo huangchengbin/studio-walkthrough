@@ -1,208 +1,75 @@
-import { useMemo } from 'react'
-import { Html } from '@react-three/drei'
+import { Suspense, useMemo } from 'react'
+import { Html, useGLTF } from '@react-three/drei'
+import * as THREE from 'three'
 import WalkControls from './WalkControls'
-import { achievements, ROOM, Achievement } from '../data/mock'
+import type { CatalogItem } from '../data/types'
 import type { FlyTarget } from '../App'
 
 interface Props {
+  items: CatalogItem[]
   fly: FlyTarget | null
   playing: string | null
-  onPick: (a: Achievement) => void
+  onPick: (item: CatalogItem) => void
   onFlyDone: () => void
 }
 
-function Exhibit({ a, playing }: { a: Achievement; playing: boolean }) {
-  const color = a.category === '荣誉表彰' ? '#B8925A' : a.category === '软件系统' ? '#4E7FC4' : a.category === '影像资料' ? '#5B7CA6' : '#8FA3BC'
+function Hotspot({ item, index, onPick }: { item: CatalogItem; index: number; onPick: () => void }) {
   return (
-    <group position={[a.at.x, 0, a.at.z]} rotation={[0, a.at.rotY, 0]}>
-      {a.shape === 'gear' && (
-        <>
-          <mesh position={[0, 0.25, 0]}>
-            <boxGeometry args={[1.1, 0.5, 0.8]} />
-            <meshStandardMaterial color="#F7F9FC" roughness={0.55} />
-          </mesh>
-          <mesh position={[0, 0.78, 0]} rotation={[0, 0.4, 0]}>
-            <cylinderGeometry args={[0.34, 0.4, 0.5, 20]} />
-            <meshStandardMaterial color={color} roughness={0.35} metalness={0.35} />
-          </mesh>
-          <mesh position={[0.38, 0.92, 0.1]} rotation={[0, 0.4, 0.5]}>
-            <boxGeometry args={[0.5, 0.08, 0.26]} />
-            <meshStandardMaterial color="#C7D2E0" roughness={0.4} metalness={0.5} />
-          </mesh>
-        </>
-      )}
-      {a.shape === 'robot' && (
-        <>
-          <mesh position={[0, 0.12, 0]}>
-            <boxGeometry args={[1.0, 0.24, 0.8]} />
-            <meshStandardMaterial color="#F7F9FC" roughness={0.55} />
-          </mesh>
-          <mesh position={[0, 0.6, 0]}>
-            <cylinderGeometry args={[0.3, 0.34, 0.72, 20]} />
-            <meshStandardMaterial color={color} roughness={0.35} metalness={0.3} />
-          </mesh>
-          <mesh position={[0, 1.06, 0]}>
-            <sphereGeometry args={[0.22, 20, 16]} />
-            <meshStandardMaterial color="#DCE6F2" roughness={0.25} metalness={0.4} />
-          </mesh>
-          <mesh position={[0, 1.06, 0.19]} rotation={[Math.PI / 2, 0, 0]}>
-            <cylinderGeometry args={[0.07, 0.07, 0.06, 16]} />
-            <meshStandardMaterial color="#2E64B8" emissive="#1B3E7A" emissiveIntensity={0.6} />
-          </mesh>
-        </>
-      )}
-      {a.shape === 'wall' && (
-        <>
-          <mesh position={[0, 1.7, 0]}>
-            <boxGeometry args={[3.0, 1.7, 0.12]} />
-            <meshStandardMaterial color="#F2F5F9" roughness={0.7} />
-          </mesh>
-          <mesh position={[0, 2.2, 0.07]}>
-            <boxGeometry args={[2.6, 0.6, 0.04]} />
-            <meshStandardMaterial color={color} emissive="#3A2C14" emissiveIntensity={0.25} roughness={0.5} metalness={0.4} />
-          </mesh>
-          <mesh position={[0, 1.35, 0.07]}>
-            <boxGeometry args={[2.6, 0.9, 0.04]} />
-            <meshStandardMaterial color="#FAFBFD" roughness={0.55} />
-          </mesh>
-        </>
-      )}
-      {a.shape === 'screen' && (
-        <>
-          <mesh position={[0, 1.6, 0]}>
-            <boxGeometry args={[1.7, 1.05, 0.08]} />
-            <meshStandardMaterial color="#2C3A4E" roughness={0.35} metalness={0.2} />
-          </mesh>
-          <mesh position={[0, 1.6, 0.06]}>
-            <planeGeometry args={[1.56, 0.92]} />
-            <meshStandardMaterial color="#17407A" emissive="#1E4E96" emissiveIntensity={playing ? 1.1 : 0.5} />
-          </mesh>
-          <mesh position={[0, 0.6, 0]}>
-            <boxGeometry args={[1.5, 0.5, 0.4]} />
-            <meshStandardMaterial color="#F7F9FC" roughness={0.55} />
-          </mesh>
-        </>
-      )}
-      {a.shape === 'panel' && (
-        <>
-          <mesh position={[0, 1.75, 0]}>
-            <boxGeometry args={[3.4, 1.6, 0.1]} />
-            <meshStandardMaterial color="#F4F7FA" roughness={0.7} />
-          </mesh>
-          <mesh position={[-0.9, 1.95, 0.06]}>
-            <boxGeometry args={[1.1, 0.5, 0.03]} />
-            <meshStandardMaterial color={color} roughness={0.5} />
-          </mesh>
-          <mesh position={[0.55, 1.75, 0.06]}>
-            <boxGeometry args={[1.7, 0.8, 0.03]} />
-            <meshStandardMaterial color="#EDF1F6" roughness={0.55} />
-          </mesh>
-        </>
-      )}
-    </group>
-  )
-}
-
-function Room() {
-  const { w, d, h } = ROOM
-  return (
-    <group>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
-        <planeGeometry args={[w, d]} />
-        <meshStandardMaterial color="#D8C7AA" roughness={0.75} />
-      </mesh>
-      <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, h, 0]}>
-        <planeGeometry args={[w, d]} />
-        <meshStandardMaterial color="#FFFFFF" roughness={0.95} />
-      </mesh>
-      <mesh position={[0, h / 2, -d / 2]}>
-        <boxGeometry args={[w, h, 0.12]} />
-        <meshStandardMaterial color="#FDFDFE" roughness={0.85} />
-      </mesh>
-      <mesh position={[0, h / 2, d / 2]} rotation={[0, Math.PI, 0]}>
-        <boxGeometry args={[w, h, 0.12]} />
-        <meshStandardMaterial color="#FAFBFC" roughness={0.85} />
-      </mesh>
-      <mesh position={[-w / 2, h / 2, 0]} rotation={[0, Math.PI / 2, 0]}>
-        <boxGeometry args={[d, h, 0.12]} />
-        <meshStandardMaterial color="#FAFBFC" roughness={0.85} />
-      </mesh>
-      <mesh position={[w / 2, h / 2, 0]} rotation={[0, -Math.PI / 2, 0]}>
-        <boxGeometry args={[d, h, 0.12]} />
-        <meshStandardMaterial color="#FAFBFC" roughness={0.85} />
-      </mesh>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.011, 0]}>
-        <ringGeometry args={[1.2, 1.24, 64]} />
-        <meshBasicMaterial color="#3B82F6" transparent opacity={0.32} />
-      </mesh>
-      {/* 踢脚线 */}
-      <mesh position={[0, 0.06, -d / 2 + 0.1]}>
-        <boxGeometry args={[w - 0.2, 0.12, 0.04]} />
-        <meshStandardMaterial color="#ECEFF3" roughness={0.7} />
-      </mesh>
-      <mesh position={[0, 0.06, d / 2 - 0.1]}>
-        <boxGeometry args={[w - 0.2, 0.12, 0.04]} />
-        <meshStandardMaterial color="#ECEFF3" roughness={0.7} />
-      </mesh>
-      <mesh position={[-w / 2 + 0.1, 0.06, 0]}>
-        <boxGeometry args={[0.04, 0.12, d - 0.2]} />
-        <meshStandardMaterial color="#ECEFF3" roughness={0.7} />
-      </mesh>
-      <mesh position={[w / 2 - 0.1, 0.06, 0]}>
-        <boxGeometry args={[0.04, 0.12, d - 0.2]} />
-        <meshStandardMaterial color="#ECEFF3" roughness={0.7} />
-      </mesh>
-      {/* 顶部灯带 */}
-      <mesh position={[0, h - 0.06, -d / 2 + 0.08]}>
-        <boxGeometry args={[w - 1.2, 0.035, 0.025]} />
-        <meshStandardMaterial color="#D9E4F4" emissive="#8FB8F0" emissiveIntensity={0.45} />
-      </mesh>
-      <spotLight position={[0, h - 0.2, 0]} angle={0.95} penumbra={0.8} intensity={10} color="#FFFFFF" distance={14} decay={2} />
-    </group>
-  )
-}
-
-function Hotspot({ a, index, onPick }: { a: Achievement; index: number; onPick: () => void }) {
-  return (
-    <Html position={[a.at.x, 2.35, a.at.z]} center distanceFactor={11} zIndexRange={[6, 0]} className="hotspot-wrap">
+    <Html position={[item.world[0], item.top + 0.16, item.world[2]]} center distanceFactor={10} zIndexRange={[6, 0]} className="hotspot-wrap">
       <div className="hotspot" onClick={(e) => { e.stopPropagation(); onPick() }}>
         {String(index + 1).padStart(2, '0')}
         <div className="tip">
-          <strong>{a.name}</strong>
-          <span>{a.demo ? '点击查看详情 · 功能演示' : '点击查看详情'}</span>
+          <strong>{item.name}</strong>
+          <span>点击查看详情</span>
         </div>
       </div>
     </Html>
   )
 }
 
-export default function Experience({ fly, playing, onPick, onFlyDone }: Props) {
+function Scene() {
+  const { scene } = useGLTF('/assets/scene.glb')
+  useMemo(() => {
+    scene.traverse((o) => {
+      const m = o as THREE.Mesh
+      if (m.isMesh) {
+        m.castShadow = false
+        m.receiveShadow = false
+        const mat = m.material as THREE.MeshStandardMaterial
+        if (mat && 'envMapIntensity' in mat) mat.envMapIntensity = 0.6
+      }
+    })
+  }, [scene])
+  return <primitive object={scene} />
+}
+
+export default function Experience({ items, fly, playing, onPick, onFlyDone }: Props) {
   const obstacles = useMemo(
-    () =>
-      achievements.map((a) => ({
-        x: a.at.x,
-        z: a.at.z,
-        r: a.shape === 'wall' || a.shape === 'panel' ? 1.5 : 0.9,
-      })),
+    () => [
+      { x: 0.87, z: -0.45, r: 0.85 },
+      { x: 2.38, z: -0.45, r: 0.85 },
+      { x: 3.89, z: -0.45, r: 0.85 },
+      { x: 5.4, z: -0.45, r: 0.85 },
+      { x: 9.65, z: -2.4, r: 1.55 },
+      { x: 8.75, z: -4.25, r: 1.35 },
+      { x: 6.1, z: -5.65, r: 1.25 },
+    ],
     [],
   )
 
   return (
     <>
       <color attach="background" args={['#F2F5F9']} />
-      <fog attach="fog" args={['#F5F8FB', 26, 60]} />
-      <ambientLight intensity={1.3} />
-      <hemisphereLight args={["#FFFFFF", "#EDE4D6", 0.7]} />
-      <directionalLight position={[6, 9, 5]} intensity={2.2} color="#FFFFFF" />
-      <pointLight position={[-4, 3, 2]} intensity={0.5} color="#FFF3E2" />
-      <pointLight position={[3, 2.9, -2]} intensity={0.4} color="#DCEBFF" />
-      <pointLight position={[4, 3, -2]} intensity={0.35} color="#7CB8FF" />
-      <Room />
-      {achievements.map((a) => (
-        <Exhibit key={a.id} a={a} playing={playing === a.id} />
-      ))}
-      {achievements.map((a, i) => (
-        <Hotspot key={a.id} a={a} index={i} onPick={() => onPick(a)} />
+      <fog attach="fog" args={['#F5F8FB', 30, 60]} />
+      <ambientLight intensity={1.15} />
+      <hemisphereLight args={['#FFFFFF', '#E8DFCF', 0.65]} />
+      <directionalLight position={[6, 9, 5]} intensity={1.6} color="#FFF9F0" />
+      <directionalLight position={[-4, 6, -6]} intensity={0.5} color="#DCE9FF" />
+      <Suspense fallback={null}>
+        <Scene />
+      </Suspense>
+      {items.map((item, i) => (
+        <Hotspot key={item.uid} item={item} index={i} onPick={() => onPick(item)} />
       ))}
       <WalkControls fly={fly} obstacles={obstacles} onFlyDone={onFlyDone} />
     </>
