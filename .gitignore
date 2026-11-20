@@ -28,6 +28,8 @@ tmp/
 
 # 生成的场景资产（由 tools/scene2glb.py + Blender 从 source/data/scene.gz 重建）
 web/public/assets/scene.glb
+web/public/assets/scene_new.glb
+web/public/assets/v07_scene.glb
 web/public/assets/catalog.json
 
 # 用户原始素材（CAD/照片/压缩包，本地保留，不入库）

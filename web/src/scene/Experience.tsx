@@ -62,10 +62,10 @@ export default function Experience({ items, fly, playing, onPick, onFlyDone }: P
     <>
       <color attach="background" args={['#F2F5F9']} />
       <fog attach="fog" args={['#F5F8FB', 30, 60]} />
-      <ambientLight intensity={0.9} />
-      <hemisphereLight args={['#FFFFFF', '#E8DFCF', 0.5]} />
-      <directionalLight position={[6, 9, 5]} intensity={1.25} color="#FFF9F0" />
-      <directionalLight position={[-4, 6, -6]} intensity={0.5} color="#DCE9FF" />
+      <ambientLight intensity={1.05} color="#FFFFFF" />
+      <hemisphereLight args={['#FFFFFF', '#FFFFFF', 0.35]} />
+      <directionalLight position={[6, 9, 5]} intensity={1.0} color="#FFFFFF" />
+      <directionalLight position={[-4, 6, -6]} intensity={0.35} color="#F2F6FF" />
       <Suspense fallback={null}>
         <Scene />
       </Suspense>

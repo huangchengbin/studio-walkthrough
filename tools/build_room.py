@@ -3,7 +3,7 @@ import bpy, math, os
 # 先清空场景，再建材质（否则材质引用失效）
 bpy.ops.wm.read_factory_settings(use_empty=True)
 
-SRC_ITEMS = "/Users/admin/Desktop/LaoMoSHi_show/web/public/assets/scene.glb"   # 只保留其中的成果实例
+SRC_ITEMS = "/Users/admin/Desktop/LaoMoSHi_show/web/public/assets/v07_scene.glb"  # V07 原始转换件（仅取其中成果实例）
 DST = "/Users/admin/Desktop/LaoMoSHi_show/web/public/assets/scene_new.glb"
 RENDER_TOP = "/tmp/room_top.png"
 RENDER_IN = "/tmp/room_in.png"
@@ -25,8 +25,8 @@ def mat(name, color, rough=0.75, metal=0.0, emit=None, emit_strength=0.0):
         bsdf.inputs["Emission Strength"].default_value = emit_strength
     return m
 
-WALL = mat("wall_white", (0.97, 0.98, 0.99), 0.85)
-FLOOR = mat("floor_wood", (0.74, 0.62, 0.46), 0.6)
+WALL = mat("wall_pure_white", (1.0, 1.0, 1.0), 0.82)
+FLOOR = mat("floor_gray", (0.375, 0.39, 0.405), 0.72)
 CEIL = mat("ceiling", (1, 1, 1), 0.95)
 GREEN = mat("accent_green", (0.06, 0.33, 0.26), 0.5)
 PLINTH = mat("plinth", (0.96, 0.97, 0.99), 0.4)
