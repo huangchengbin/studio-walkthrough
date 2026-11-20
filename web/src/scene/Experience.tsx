@@ -2,6 +2,7 @@ import { Suspense, forwardRef, useEffect, useImperativeHandle, useMemo, useRef, 
 import { Html, useGLTF } from '@react-three/drei'
 import { useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import WalkControls from './WalkControls'
 import { editBus } from './editBus'
 import type { CatalogItem } from '../data/types'
@@ -27,6 +28,7 @@ interface Props {
   editMode?: boolean
   selectedId?: string | null
   layout?: Record<string, Placement>
+  models?: Record<string, Blob>
   onSelect?: (id: string | null) => void
   onMoved?: (id: string, p: Placement) => void
 }
@@ -57,7 +59,7 @@ const PED_GEO = new THREE.BoxGeometry(0.62, 0.88, 0.62)
 const PED_MAT = new THREE.MeshStandardMaterial({ color: 0xd8d8d8, roughness: 0.5 })
 
 const Experience = forwardRef<EditApi, Props>(function Experience(
-  { items, fly, playing, onPick, onFlyDone, editMode = false, selectedId = null, layout = {}, onSelect, onMoved },
+  { items, fly, playing, onPick, onFlyDone, editMode = false, selectedId = null, layout = {}, models = {}, onSelect, onMoved },
   ref,
 ) {
   const { scene } = useGLTF('/assets/scene.glb')
@@ -184,6 +186,55 @@ const Experience = forwardRef<EditApi, Props>(function Experience(
       }
     })
   }, [layout, scene])
+
+  // ---------- 成果模型替换（本地上传） ----------
+  const applied = useRef<Set<string>>(new Set())
+
+  useEffect(() => {
+    Object.entries(models).forEach(([id, blob]) => {
+      const key = `${id}:${blob.size}`
+      if (applied.current.has(key)) return
+      const node = findNode(id)
+      if (!node) return
+      applied.current.add(key)
+      blob.arrayBuffer().then((buf) => {
+        new GLTFLoader().parse(buf, '', (gltf) => {
+          const target = findNode(id)
+          if (!target) return
+          // 清空旧子节点
+          for (const c of [...target.children]) {
+            target.remove(c)
+            c.traverse((o) => {
+              const m = o as THREE.Mesh
+              if (m.isMesh) {
+                m.geometry?.dispose()
+              }
+            })
+          }
+          const obj = gltf.scene
+          obj.traverse((o) => {
+            const m = o as THREE.Mesh
+            if (m.isMesh) {
+              m.castShadow = true
+              m.receiveShadow = true
+            }
+          })
+          // 归一化：模型最长边缩放到 0.42m，底面贴台面/地面
+          const box = new THREE.Box3().setFromObject(obj)
+          const size = new THREE.Vector3()
+          box.getSize(size)
+          const k = size.y > 0.01 ? Math.min(8, 0.42 / size.y) : 1
+          obj.scale.setScalar(k)
+          obj.updateMatrixWorld(true)
+          const box2 = new THREE.Box3().setFromObject(obj)
+          obj.position.y -= box2.min.y
+          target.add(obj)
+        }, (err) => {
+          console.error('[replace-model] 解析失败', id, err)
+        })
+      })
+    })
+  }, [models, scene])
 
   // ---------- 布放：选中高亮框 ----------
   useEffect(() => {

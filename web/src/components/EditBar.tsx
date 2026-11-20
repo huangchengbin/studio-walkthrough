@@ -18,7 +18,7 @@ export default function EditBar({
   onExit,
 }: Props) {
   return (
-    <div className="panel editbar">
+    <div className={`panel editbar${libraryOpen ? ' with-library' : ''}`}>
       <span className="editbar-tag">布放编辑模式</span>
 
       <button className={`editbar-btn${libraryOpen ? ' active' : ''}`} onClick={onToggleLibrary}>
