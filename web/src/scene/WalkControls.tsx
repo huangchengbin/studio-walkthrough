@@ -7,7 +7,7 @@ interface Obstacle { x: number; z: number; r: number }
 
 const EYE = 1.66
 const SPEED = 1.55
-const BOUND = { x: 5.2, z: 3.2 }
+const BOUND = { xMin: 0.35, xMax: 10.95, zMin: -8.05, zMax: -0.35 }
 
 export default function WalkControls({
   fly,
@@ -20,7 +20,7 @@ export default function WalkControls({
 }) {
   const { camera, gl } = useThree()
   const keys = useRef<Record<string, boolean>>({})
-  const yaw = useRef(0)
+  const yaw = useRef(Math.PI)
   const pitch = useRef(0)
   const dragging = useRef(false)
   const last = useRef<[number, number]>([0, 0])
@@ -86,7 +86,7 @@ export default function WalkControls({
   }, [fly])
 
   const canStand = (x: number, z: number) => {
-    if (Math.abs(x) > BOUND.x || Math.abs(z) > BOUND.z) return false
+    if (x < BOUND.xMin || x > BOUND.xMax || z < BOUND.zMin || z > BOUND.zMax) return false
     for (const o of obstaclesRef.current) {
       const dx = x - o.x
       const dz = z - o.z
@@ -139,9 +139,11 @@ export default function WalkControls({
     }
 
     cam.position.y = EYE
+    cam.up.set(0, 1, 0)
     cam.rotation.order = 'YXZ'
     cam.rotation.y = yaw.current
     cam.rotation.x = pitch.current
+    cam.rotation.z = 0
   })
 
   return null

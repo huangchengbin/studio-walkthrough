@@ -1,7 +1,7 @@
 # LaoMoSHi_show
 
 > 一句话定位：**劳模室 3D 线上展厅——给领导与嘉宾的浏览器漫游参观工具**（详见 `docs/product/overview.md`，产品定位只在那一份描述）。
-> 当前阶段：**第 3 期 · 观众端 MVP 已合并 main（tag `stage-3-mvp-viewer`）：真实场景 + 漫游 + 目录 + 浮层；下一步 spec-003 管理端**
+> 当前阶段：**第 3 期 · 房间重建中：L 形结构按手绘草图在 Blender 参数化重建（分支 `feature/room-rebuild`），待用户验收后合并**
 
 ## 开工顺序（不可跳步）
 
