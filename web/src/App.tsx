@@ -69,7 +69,7 @@ export default function App() {
 
   return (
     <div className="app">
-      <Canvas camera={{ fov: 78, position: [0, 1.66, 3.2] }} dpr={[1, 2]} gl={{ antialias: true }}>
+      <Canvas flat camera={{ fov: 78, position: [0, 1.66, 3.2] }} dpr={[1, 2]} gl={{ antialias: true }}>
         <Experience fly={fly} playing={playing} onPick={(a) => setSelected(a)} onFlyDone={() => setFly(null)} />
       </Canvas>
 
