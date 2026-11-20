@@ -11,6 +11,7 @@ import LibraryPanel from './components/LibraryPanel'
 import TourBar from './components/TourBar'
 import { buildTour } from './data/tour'
 import { loadModels, loadPhotos, removeModel, saveModel, savePhoto } from './data/localAssets'
+import { apiGetAssets, apiGetLayout, apiPutLayout, apiResetAsset, apiUploadModel, apiUploadPhoto, getToken, type RemoteAsset } from './data/api'
 import type { Catalog, CatalogItem } from './data/types'
 
 const WEBGL_OK = (() => {
@@ -77,18 +78,46 @@ export default function App() {
   const { active, progress } = useProgress()
 
   useEffect(() => {
-    fetch('/assets/catalog.json')
-      .then((r) => r.json())
-      .then(async (cat: Catalog) => {
-        // 合并本地上传的照片
-        const photos: Record<string, string> = await loadPhotos().catch(() => ({}))
-        if (Object.keys(photos).length) {
-          cat.items = cat.items.map((it) => (photos[it.id] ? { ...it, photo: photos[it.id] } : it))
+    ;(async () => {
+      try {
+        const cat: Catalog = await fetch('/assets/catalog.json').then((r) => r.json())
+        const localPhotos: Record<string, string> = await loadPhotos().catch(() => ({}))
+        let remote: Record<string, RemoteAsset> = {}
+        try {
+          remote = await apiGetAssets()
+        } catch {
+          /* 后端未启动 */
         }
+        cat.items = cat.items.map((it) => {
+          const photo = remote[it.id]?.photo || localPhotos[it.id]
+          return photo ? { ...it, photo } : it
+        })
         setCatalog(cat)
-      })
-      .catch(() => setToast('成果数据加载失败'))
-    loadModels().then(setModels).catch(() => {})
+
+        const remoteModels: Record<string, Blob> = {}
+        for (const [id, a] of Object.entries(remote)) {
+          if (!a.model) continue
+          try {
+            remoteModels[id] = await fetch(a.model).then((r) => r.blob())
+          } catch {
+            /* 忽略单个资产失败 */
+          }
+        }
+        const localModels = await loadModels().catch(() => ({} as Record<string, Blob>))
+        setModels({ ...localModels, ...remoteModels })
+
+        try {
+          const remoteLayout = await apiGetLayout()
+          if (remoteLayout && Object.keys(remoteLayout).length) {
+            setLayout(remoteLayout as Record<string, Placement>)
+          }
+        } catch {
+          /* 后端未启动，使用本地 */
+        }
+      } catch {
+        setToast('成果数据加载失败')
+      }
+    })()
   }, [])
 
   const loading = !catalog || (active && progress < 100)
@@ -173,13 +202,37 @@ export default function App() {
   }
 
   const replaceModel = async (item: CatalogItem, file: File) => {
+    setEditSelected(item.id)
+    if (getToken()) {
+      try {
+        const { url } = await apiUploadModel(item.id, file)
+        const blob = await fetch(url).then((r) => r.blob())
+        setModels((prev) => ({ ...prev, [item.id]: blob }))
+        showToast(`已替换模型并上传：${item.name}`)
+        return
+      } catch (e) {
+        showToast(e instanceof Error ? e.message : '上传失败，已改存本机')
+      }
+    }
     await saveModel(item.id, file)
     setModels((prev) => ({ ...prev, [item.id]: file }))
-    setEditSelected(item.id)
-    showToast(`已替换模型：${item.name}`)
+    showToast(`已替换模型（保存在本机）：${item.name}`)
   }
 
-  const replacePhoto = (item: CatalogItem, file: File) => {
+  const replacePhoto = async (item: CatalogItem, file: File) => {
+    if (getToken()) {
+      try {
+        const { url } = await apiUploadPhoto(item.id, file)
+        setCatalog((prev) => prev ? {
+          ...prev,
+          items: prev.items.map((it) => (it.id === item.id ? { ...it, photo: url } : it)),
+        } : prev)
+        showToast(`已替换照片并上传：${item.name}`)
+        return
+      } catch (e) {
+        showToast(e instanceof Error ? e.message : '上传失败，已改存本机')
+      }
+    }
     const reader = new FileReader()
     reader.onload = async () => {
       const dataUrl = String(reader.result)
@@ -194,6 +247,13 @@ export default function App() {
   }
 
   const resetModel = async (item: CatalogItem) => {
+    if (getToken()) {
+      try {
+        await apiResetAsset(item.id)
+      } catch {
+        /* 服务端失败也继续清本地 */
+      }
+    }
     await removeModel(item.id)
     setModels((prev) => {
       const next = { ...prev }
@@ -204,10 +264,15 @@ export default function App() {
     window.setTimeout(() => window.location.reload(), 600)
   }
 
-  const saveLayout = () => {
+  const saveLayout = async () => {
     localStorage.setItem(LAYOUT_KEY, JSON.stringify(layout))
     setDirty(false)
-    showToast('布放已保存，观众端已生效')
+    try {
+      await apiPutLayout(layout)
+      showToast('布放已保存并同步到服务端')
+    } catch {
+      showToast(getToken() ? '已存本地，服务端同步失败' : '布放已保存（本机）')
+    }
   }
 
   const exitEdit = () => {

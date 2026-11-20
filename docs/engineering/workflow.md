@@ -72,3 +72,18 @@ npm run build          # tsc --noEmit + vite build
   > 注意：`build_room.py` 只从 `v07_scene.glb` 取成果模型。若误指向 `scene.glb`，会把整套房间重复导入。
 - 成果数据现为 `catalog.json`（6 条，含实景照片），spec-003 接入管理端与后端后改为接口数据。
 - 交互口径：WASD/方向键移动、拖拽环视、滚轮推拉；成果目录点击 → 镜头飞行 + 打开浮层；热点编号与目录顺序一致。
+
+## 七、本地运行（前端 + 后端）
+
+```bash
+# 1) 后端（端口 3001，首次启动会生成管理员与密钥）
+cd server && npm install && npm start
+
+# 2) 前端（端口 5173，已把 /api 与 /uploads 代理到 3001）
+cd web && npm install && npm run dev
+```
+
+- 管理员账号默认 `admin`，口令默认 `laomo2026`；部署前用环境变量覆盖：
+  `LAOMO_ADMIN=xxx LAOMO_PASSWORD=yyy npm start`
+- 后端数据落在 `server/data/`（`layout.json` 布放、`assets.json` 资产映射、`uploads/` 上传文件、`secret` 令牌密钥、`users.json` 口令哈希），**整个目录不入库**。
+- 只有一个后端进程时，Vite 代理即可；生产环境 `npm run build` 后可直接由后端托管 `web/dist`（同域，无需代理）。
