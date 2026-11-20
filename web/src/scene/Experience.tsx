@@ -1,4 +1,4 @@
-import { Suspense, useMemo } from 'react'
+import { Suspense, useEffect, useMemo, useRef } from 'react'
 import { Html, useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 import WalkControls from './WalkControls'
@@ -33,8 +33,8 @@ function Scene() {
     scene.traverse((o) => {
       const m = o as THREE.Mesh
       if (m.isMesh) {
-        m.castShadow = false
-        m.receiveShadow = false
+        m.castShadow = true
+        m.receiveShadow = true
         const mat = m.material as THREE.MeshStandardMaterial
         if (mat && 'envMapIntensity' in mat) mat.envMapIntensity = 0.6
       }
@@ -44,6 +44,16 @@ function Scene() {
 }
 
 export default function Experience({ items, fly, playing, onPick, onFlyDone }: Props) {
+  const dir = useRef<THREE.DirectionalLight>(null)
+  useEffect(() => {
+    const l = dir.current
+    if (!l) return
+    l.target.position.set(3.75, 0, -4.2)
+    l.target.updateMatrixWorld()
+    const c = l.shadow.camera
+    c.left = -9; c.right = 9; c.top = 9; c.bottom = -9; c.near = 1; c.far = 30
+    c.updateProjectionMatrix()
+  }, [])
   const obstacles = useMemo(
     () => [
       { x: 0.87, z: -0.45, r: 0.85 },
@@ -62,10 +72,19 @@ export default function Experience({ items, fly, playing, onPick, onFlyDone }: P
     <>
       <color attach="background" args={['#F2F5F9']} />
       <fog attach="fog" args={['#F5F8FB', 30, 60]} />
-      <ambientLight intensity={1.05} color="#FFFFFF" />
-      <hemisphereLight args={['#FFFFFF', '#FFFFFF', 0.35]} />
-      <directionalLight position={[6, 9, 5]} intensity={1.0} color="#FFFFFF" />
-      <directionalLight position={[-4, 6, -6]} intensity={0.35} color="#F2F6FF" />
+      <ambientLight intensity={2.85} color="#FFFFFF" />
+      <hemisphereLight args={['#FFFFFF', '#D8DDE3', 0.55]} />
+      <directionalLight
+        ref={dir}
+        position={[7.5, 16, -1.5]}
+        intensity={0.7}
+        color="#FFFFFF"
+        castShadow
+        shadow-mapSize={[2048, 2048]}
+        shadow-bias={-0.0006}
+        shadow-normalBias={0.02}
+      />
+      <directionalLight position={[-6, 7, -7]} intensity={0.25} color="#F6F9FF" />
       <Suspense fallback={null}>
         <Scene />
       </Suspense>

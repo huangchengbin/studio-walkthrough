@@ -26,15 +26,15 @@ def mat(name, color, rough=0.75, metal=0.0, emit=None, emit_strength=0.0):
     return m
 
 WALL = mat("wall_pure_white", (1.0, 1.0, 1.0), 0.82)
-FLOOR = mat("floor_gray", (0.375, 0.39, 0.405), 0.72)
-CEIL = mat("ceiling", (1, 1, 1), 0.95)
+FLOOR = mat("floor_gray", (0.235, 0.245, 0.26), 0.7)
+CEIL = mat("ceiling", (0.90, 0.895, 0.885), 0.95)
 GREEN = mat("accent_green", (0.06, 0.33, 0.26), 0.5)
-PLINTH = mat("plinth", (0.96, 0.97, 0.99), 0.4)
-WOOD = mat("table_wood", (0.63, 0.45, 0.28), 0.5)
+PLINTH = mat("plinth", (0.49, 0.49, 0.49), 0.5)
+WOOD = mat("table_wood", (0.40, 0.29, 0.18), 0.5)
 DARK = mat("rack_dark", (0.12, 0.14, 0.17), 0.45, 0.3)
 SCREEN = mat("screen", (0.05, 0.1, 0.2), 0.3, 0.1, emit=(0.15, 0.35, 0.85), emit_strength=1.2)
 LAMP = mat("ceiling_lamp", (1, 1, 1), 0.9, 0, emit=(1, 0.98, 0.92), emit_strength=3.0)
-CHAIR = mat("chair", (0.55, 0.57, 0.6), 0.7)
+CHAIR = mat("chair", (0.30, 0.32, 0.35), 0.7)
 
 def box(name, x0, x1, y0, y1, z0, z1, material):
     bpy.ops.mesh.primitive_cube_add(size=1, location=((x0+x1)/2, (y0+y1)/2, (z0+z1)/2))
@@ -95,14 +95,16 @@ box("lintel_server", 7.5, 7.68, 0.18, 1.02, 2.1, H, WALL)
 for name, x0, x1, y0, y1 in walls:
     if name.startswith("C_") or name.startswith("D_"):
         continue
-box("skirt_south", 0, 6.1, 0.01, 0.03, 0, 0.1, PLINTH)
-box("skirt_north", 0, 6.1, 8.37, 8.39, 0, 0.1, PLINTH)
+SKIRT = mat("skirting", (0.22, 0.235, 0.25), 0.7)
+box("skirt_south", 0, 6.1, 0.01, 0.035, 0, 0.13, SKIRT)
+box("skirt_north", 0, 6.1, 8.365, 8.39, 0, 0.13, SKIRT)
+box("skirt_west", 0.01, 0.035, 0, 8.4, 0, 0.13, SKIRT)
 
 # ---------- 4) 展面处理 ----------
 # B 面（南墙）：国网绿展墙
 box("b_green", 0.05, 6.1, 0.02, 0.06, 0.1, H - 0.05, GREEN)
 # F 面（北墙）：白色简介板 + 细框
-box("f_board", 0.35, 5.85, 8.33, 8.36, 0.25, 2.95, mat("board_white", (0.99, 0.99, 1), 0.6))
+box("f_board", 0.35, 5.85, 8.33, 8.36, 0.25, 2.95, mat("board_white", (0.90, 0.915, 0.93), 0.6))
 box("f_frame_top", 0.3, 5.9, 8.32, 8.35, 2.95, 3.0, GREEN)
 box("f_frame_bottom", 0.3, 5.9, 8.32, 8.35, 0.2, 0.25, GREEN)
 # E 面（主厅东墙）：3×3 拼接屏
