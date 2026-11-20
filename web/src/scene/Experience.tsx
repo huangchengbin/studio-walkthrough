@@ -11,6 +11,7 @@ export interface Placement {
   x: number
   z: number
   rotY: number
+  placed?: boolean
 }
 
 export interface EditApi {
@@ -30,9 +31,9 @@ interface Props {
   onMoved?: (id: string, p: Placement) => void
 }
 
-function Hotspot({ item, index, onPick }: { item: CatalogItem; index: number; onPick: () => void }) {
+function Hotspot({ item, index, at, onPick }: { item: CatalogItem; index: number; at: [number, number]; onPick: () => void }) {
   return (
-    <Html position={[item.world[0], item.top + 0.16, item.world[2]]} center distanceFactor={10} zIndexRange={[6, 0]} className="hotspot-wrap">
+    <Html position={[at[0], item.top + 0.16, at[1]]} center distanceFactor={10} zIndexRange={[6, 0]} className="hotspot-wrap">
       <div className="hotspot" onClick={(e) => { e.stopPropagation(); onPick() }}>
         {String(index + 1).padStart(2, '0')}
         <div className="tip">
@@ -51,6 +52,9 @@ interface AnimState {
   kids: { obj: THREE.Object3D; baseX: number }[]
   t: number
 }
+
+const PED_GEO = new THREE.BoxGeometry(0.62, 0.88, 0.62)
+const PED_MAT = new THREE.MeshStandardMaterial({ color: 0xd8d8d8, roughness: 0.5 })
 
 const Experience = forwardRef<EditApi, Props>(function Experience(
   { items, fly, playing, onPick, onFlyDone, editMode = false, selectedId = null, layout = {}, onSelect, onMoved },
@@ -131,19 +135,53 @@ const Experience = forwardRef<EditApi, Props>(function Experience(
       })
     }
     if (boxRef.current && selectedId && editMode) {
-      const g = scene.getObjectByName(`place-${selectedId}`)
+      const g = findNode(selectedId)
       if (g) boxRef.current.setFromObject(g)
     }
   })
 
   // ---------- 布放：应用已保存布局 ----------
+  const findNode = (id: string) =>
+    scene.getObjectByName(`place-${id}`) || scene.getObjectByName(`lib-${id}`) || null
+
   useEffect(() => {
     Object.entries(layout).forEach(([id, p]) => {
-      const g = scene.getObjectByName(`place-${id}`)
+      const g = findNode(id)
       if (!g) return
+      if (p.placed === false) {
+        g.position.set(0, -60, 0)
+        const ped = scene.getObjectByName(`ped-${id}`)
+        if (ped) scene.remove(ped)
+        return
+      }
       g.position.x = p.x
       g.position.z = p.z
       g.rotation.y = p.rotY
+      if (p.placed && g.name.startsWith('lib-')) {
+        // 库中模型多为小件：补一个 0.88m 展台，模型按 0.42m 展示高度适配后台面
+        let ped = scene.getObjectByName(`ped-${id}`) as THREE.Mesh | undefined
+        if (!ped) {
+          ped = new THREE.Mesh(PED_GEO, PED_MAT)
+          ped.name = `ped-${id}`
+          ped.castShadow = true
+          ped.receiveShadow = true
+          scene.add(ped)
+        }
+        ped.position.set(p.x, 0.44, p.z)
+        const base = (g.userData.baseScale as number) ?? g.scale.x
+        g.userData.baseScale = base
+        g.scale.setScalar(base)
+        g.updateMatrixWorld(true)
+        const bb = new THREE.Box3().setFromObject(g)
+        const h = bb.max.y - bb.min.y
+        const k = h > 0.02 ? Math.min(6, 0.42 / h) : 1
+        g.scale.setScalar(base * k)
+        g.updateMatrixWorld(true)
+        const bb2 = new THREE.Box3().setFromObject(g)
+        g.position.y = 0.88 - bb2.min.y
+      } else {
+        g.position.y = p.placed ? 0 : g.position.y
+      }
     })
   }, [layout, scene])
 
@@ -167,7 +205,7 @@ const Experience = forwardRef<EditApi, Props>(function Experience(
       boxRef.current.visible = false
       return
     }
-    const g = scene.getObjectByName(`place-${selectedId}`)
+    const g = findNode(selectedId)
     if (!g) {
       boxRef.current.visible = false
       return
@@ -180,7 +218,7 @@ const Experience = forwardRef<EditApi, Props>(function Experience(
   const findPlace = (obj: THREE.Object3D | null): THREE.Object3D | null => {
     let o: THREE.Object3D | null = obj
     while (o) {
-      if (o.name && o.name.startsWith('place-')) return o
+      if (o.name && (o.name.startsWith('place-') || o.name.startsWith('lib-'))) return o
       o = o.parent
     }
     return null
@@ -195,7 +233,7 @@ const Experience = forwardRef<EditApi, Props>(function Experience(
     }
     e.stopPropagation()
     editBus.draggingItem = true
-    const id = place.name.replace('place-', '')
+    const id = place.name.replace(/^(place|lib)-/, '')
     onSelect?.(id)
 
     const ray = new THREE.Raycaster()
@@ -233,7 +271,7 @@ const Experience = forwardRef<EditApi, Props>(function Experience(
   useImperativeHandle(ref, () => ({
     rotate(deg: number) {
       if (!selectedId) return
-      const g = scene.getObjectByName(`place-${selectedId}`)
+      const g = findNode(selectedId)
       if (!g) return
       g.rotation.y += (deg * Math.PI) / 180
       onMoved?.(selectedId, { x: g.position.x, z: g.position.z, rotY: g.rotation.y })
@@ -260,9 +298,12 @@ const Experience = forwardRef<EditApi, Props>(function Experience(
       <Suspense fallback={null}>
         <primitive object={scene} onPointerDown={onPointerDown} />
       </Suspense>
-      {!editMode && items.map((item, i) => (
-        <Hotspot key={item.uid} item={item} index={i} onPick={() => onPick(item)} />
-      ))}
+      {!editMode && items.map((item, i) => {
+        const p = layout[item.id]
+        if (p && p.placed === false) return null
+        const at: [number, number] = p ? [p.x, p.z] : [item.world[0], item.world[2]]
+        return <Hotspot key={item.uid} item={item} index={i} at={at} onPick={() => onPick(item)} />
+      })}
       <WalkControls fly={fly} obstacles={obstacles} onFlyDone={onFlyDone} lookEnabled={!dragging} />
     </>
   )

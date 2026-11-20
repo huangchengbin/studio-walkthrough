@@ -11,6 +11,7 @@ export interface CatalogItem {
   top: number
   rotation: number
   scale: number
+  placed?: boolean
   demo: boolean
 }
 
