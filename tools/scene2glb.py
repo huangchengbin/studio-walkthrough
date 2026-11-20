@@ -183,6 +183,27 @@ for p in d['catalog']['defaultPlacements']:
         'scale': scale,
     })
 
+# 未布展成果：模型导出到地下"仓库层"（y=-60），由前端放入场景时再移上来
+placed_ids = {p['assetId'] for p in d['catalog']['defaultPlacements']}
+unplaced = []
+STORE_Y = -60.0
+for it in d['catalog']['items']:
+    if it['id'] in placed_ids:
+        continue
+    parent_children = []
+    for j, im in enumerate(it['meshes']):
+        add_mesh(im, f"{it['id']}-{j}")
+        parent_children.append(len(gltf_nodes) - 1)
+    node = {
+        'name': f"lib-{it['id']}",
+        'translation': [0.0, STORE_Y, 0.0],
+        'scale': [VISUAL_SCALE, VISUAL_SCALE, VISUAL_SCALE],
+        'children': parent_children,
+    }
+    gltf_nodes.append(node)
+    root_nodes.append(len(gltf_nodes) - 1)
+    unplaced.append(it['id'])
+
 # ---------- 组装 GLB ----------
 bin_padded = bytes(buf) + b'\x00' * ((4 - len(buf) % 4) % 4)
 gltf = {
@@ -227,8 +248,17 @@ cat = {
         'category': p['category'], 'summary': p['summary'],
         'photo': data_uri(p['photoRef']), 'thumb': data_uri(p['thumbRef']),
         'world': p['world'], 'top': p['top'], 'rotation': p['rotation'], 'scale': p['scale'],
+        'placed': True,
         'demo': False,
-    } for p in placed],
+    } for p in placed] + [{
+        'id': it['id'], 'uid': it['id'], 'name': it['name'], 'code': it.get('code') or '',
+        'category': it.get('category') or '', 'summary': it.get('summary') or '',
+        'photo': data_uri(it.get('photoRef')), 'thumb': data_uri(it.get('thumbRef')),
+        'world': [3.75, 0, -4.2], 'top': it['bounds']['max'][1] * VISUAL_SCALE,
+        'rotation': 0, 'scale': VISUAL_SCALE,
+        'placed': False,
+        'demo': False,
+    } for it in d['catalog']['items'] if it['id'] not in placed_ids],
 }
 (OUT / 'catalog.json').write_text(json.dumps(cat, ensure_ascii=False), encoding='utf-8')
 print('catalog.json', round((OUT / 'catalog.json').stat().st_size / 1024, 0), 'KB | items', len(cat['items']))

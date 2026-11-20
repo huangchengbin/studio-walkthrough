@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { useProgress } from '@react-three/drei'
 import Experience, { type EditApi, type Placement } from './scene/Experience'
@@ -53,6 +53,17 @@ export default function App() {
   const [dirty, setDirty] = useState(false)
   const [libraryOpen, setLibraryOpen] = useState(false)
   const expRef = useRef<EditApi>(null)
+
+  // 布展状态：目录默认值 + 本次调整
+  const placedMap = useMemo(() => {
+    const m: Record<string, boolean> = {}
+    catalog?.items.forEach((i) => {
+      m[i.id] = layout[i.id]?.placed ?? i.placed !== false
+    })
+    return m
+  }, [catalog, layout])
+
+  const viewItems = (catalog?.items ?? []).filter((i) => placedMap[i.id])
   const { active, progress } = useProgress()
 
   useEffect(() => {
@@ -90,6 +101,32 @@ export default function App() {
     return () => window.removeEventListener('keydown', h)
   }, [])
 
+  // 放入场景的默认落点：展台前与椭圆桌之间的空地（保证在初始视野内）
+  const SPOTS = [
+    { x: 2.25, z: -1.55 }, { x: 5.15, z: -1.55 },
+    { x: 2.25, z: -2.55 }, { x: 5.15, z: -2.55 },
+    { x: 3.70, z: -1.35 }, { x: 3.70, z: -2.75 },
+  ]
+  const spotFor = () => {
+    const n = Object.values(placedMap).filter(Boolean).length
+    return SPOTS[n % SPOTS.length]
+  }
+
+  const placeItem = (item: CatalogItem) => {
+    const spot = spotFor()
+    setLayout((prev) => ({ ...prev, [item.id]: { x: spot.x, z: spot.z, rotY: 0, placed: true } }))
+    setEditSelected(item.id)
+    setDirty(true)
+    showToast(`已放入场景：${item.name}`)
+  }
+
+  const removeItem = (item: CatalogItem) => {
+    setLayout((prev) => ({ ...prev, [item.id]: { x: 0, z: 0, rotY: 0, placed: false } }))
+    if (editSelected === item.id) setEditSelected(null)
+    setDirty(true)
+    showToast(`已撤展：${item.name}`)
+  }
+
   const saveLayout = () => {
     localStorage.setItem(LAYOUT_KEY, JSON.stringify(layout))
     setDirty(false)
@@ -123,7 +160,7 @@ export default function App() {
       <Canvas flat shadows camera={{ fov: 78, position: START }} dpr={[1, 2]} gl={{ antialias: true }}>
         {catalog && (
           <Experience
-            items={catalog.items}
+            items={viewItems}
             fly={fly}
             playing={playing}
             onPick={(item) => setSelected(item)}
@@ -143,7 +180,7 @@ export default function App() {
 
       {catalog && (
         <Hud
-          items={catalog.items}
+          items={viewItems}
           activeId={selected?.id}
           onPick={editMode ? (item) => setEditSelected(item.id) : focus}
           guide={guide}
@@ -200,8 +237,11 @@ export default function App() {
       {editMode && libraryOpen && catalog && (
         <LibraryPanel
           items={catalog.items}
+          placed={placedMap}
           selectedId={editSelected}
           onPick={(item) => setEditSelected(item.id)}
+          onPlace={placeItem}
+          onRemove={removeItem}
           onClose={() => setLibraryOpen(false)}
         />
       )}
