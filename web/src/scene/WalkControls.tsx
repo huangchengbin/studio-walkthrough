@@ -7,7 +7,7 @@ interface Obstacle { x: number; z: number; r: number }
 
 const EYE = 1.66
 const SPEED = 1.55
-const BOUND = { xMin: 0.35, xMax: 10.95, zMin: -8.05, zMax: -0.35 }
+const BOUND = { x: 5.2, z: 3.2 }
 
 export default function WalkControls({
   fly,
@@ -86,7 +86,7 @@ export default function WalkControls({
   }, [fly])
 
   const canStand = (x: number, z: number) => {
-    if (x < BOUND.xMin || x > BOUND.xMax || z < BOUND.zMin || z > BOUND.zMax) return false
+    if (Math.abs(x) > BOUND.x || Math.abs(z) > BOUND.z) return false
     for (const o of obstaclesRef.current) {
       const dx = x - o.x
       const dz = z - o.z
