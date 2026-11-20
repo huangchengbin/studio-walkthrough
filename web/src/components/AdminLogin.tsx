@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { ApiOffline, apiLogin } from '../data/api'
 
 interface Props {
   onSuccess: () => void
@@ -13,13 +14,27 @@ export default function AdminLogin({ onSuccess, onClose }: Props) {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
 
-  const submit = (e: React.FormEvent) => {
+  const [offline, setOffline] = useState(false)
+
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (account.trim() === ACCOUNT && password === PASSWORD) {
+    // 优先走后端校验；后端未启动时降级为本机演示口令
+    try {
+      await apiLogin(account.trim(), password)
       onSuccess()
       return
+    } catch (err) {
+      if (err instanceof ApiOffline) {
+        setOffline(true)
+        if (account.trim() === ACCOUNT && password === PASSWORD) {
+          onSuccess()
+          return
+        }
+        setError('服务未启动，且本机演示口令不正确')
+        return
+      }
+      setError(err instanceof Error ? err.message : '登录失败')
     }
-    setError('账号或口令不正确')
   }
 
   return (
@@ -54,6 +69,11 @@ export default function AdminLogin({ onSuccess, onClose }: Props) {
         </label>
 
         {error && <div className="err-text">{error}</div>}
+        {offline && !error && (
+          <div className="err-text" style={{ color: 'var(--warn)' }}>
+            后端服务未启动，当前为本机演示模式
+          </div>
+        )}
 
         <div style={{ display: 'flex', gap: 10, marginTop: 18 }}>
           <button type="button" className="btn-outline" style={{ flex: 1 }} onClick={onClose}>

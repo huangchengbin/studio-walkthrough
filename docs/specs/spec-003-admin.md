@@ -92,3 +92,25 @@
 - **恢复原模型**：删除本地记录并重载页面，回到 GLB 自带模型。
 - 存储说明：V1 为纯前端方案（IndexedDB），换设备/换浏览器不共享；接后端后改为上传到服务端并写入 `achievement.model_url` / `photo_url`。
 - 验证状态：面板与按钮布局已截图确认；文件选择与解析流程未做自动化验证（浏览器自动化无法操作系统文件选择框），需人工试一次。
+
+## 补充（2026-11-21）：最小后端已落地
+
+`server/index.mjs`（Express + multer，端口 3001，数据落 `server/data/`）：
+
+| 接口 | 鉴权 | 说明 |
+|---|---|---|
+| `POST /api/login` | 否 | scrypt 校验，返回 7 天期 HMAC 签名令牌 |
+| `GET /api/layout` | 否 | 观众端读取布放，保证所有人看到同一套布置 |
+| `PUT /api/layout` | 是 | 管理员保存布放 |
+| `GET /api/assets` | 否 | 已替换模型/照片的映射表 |
+| `POST /api/assets/:id/model` | 是 | 上传 glb（≤80MB），覆盖旧文件 |
+| `POST /api/assets/:id/photo` | 是 | 上传照片 |
+| `DELETE /api/assets/:id` | 是 | 恢复原模型/照片 |
+
+前端行为：
+- 登录优先调用后端；**后端未启动时降级为本机演示口令**并在弹窗提示。
+- 布放保存：写后端成功提示"已同步服务端"，失败退回本地缓存（localStorage）并提示。
+- 模型/照片替换：有令牌则上传到服务端并通过 `/uploads/...` 拉取；无令牌退回 IndexedDB。
+- 启动时先读 `GET /api/assets`（照片/模型）与 `GET /api/layout`，服务端数据优先于本地缓存。
+
+验证记录：`health`、登录成功/失败（401）、带令牌 PUT、无令牌 PUT（401）、上传（返回 `/uploads/xxx.glb`）、静态访问（200）、DELETE 清理，均用 curl 实测通过；浏览器端页面渲染正常。
