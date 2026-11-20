@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import type { CatalogItem } from '../data/types'
 
 interface Props {
@@ -14,6 +15,7 @@ interface Props {
 }
 
 export default function Hud({ items, activeId, drawerOpen, onPick, guide, onDismissGuide, onHelp, onAdmin, onCenter, onTour }: Props) {
+  const [railOpen, setRailOpen] = useState(false)
   return (
     <>
       <header className="topbar">
@@ -27,24 +29,30 @@ export default function Hud({ items, activeId, drawerOpen, onPick, guide, onDism
           </div>
         </div>
         <div className="top-actions">
+          <button className="icon-btn rail-toggle" aria-label="成果目录" onClick={() => setRailOpen((v) => !v)}>
+            <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></svg>
+          </button>
           <button className="btn-outline tour-btn" onClick={onTour}>
             <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h10M4 18h7" /><circle cx="17" cy="15" r="4" /><path d="m16 14 3 1-3 1z" /></svg>
-            自动导览
+            <span className="tour-label">自动导览</span>
           </button>
-          <button className="icon-btn" aria-label="操作帮助" title="操作帮助" onClick={onHelp}>
+          <button className="icon-btn help-btn" aria-label="操作帮助" title="操作帮助" onClick={onHelp}>
             <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path d="M9.5 9a2.5 2.5 0 1 1 3.2 2.4c-.7.2-.7 1-.7 1.6M12 16h.01" /></svg>
           </button>
-          <button className="btn-outline" onClick={onAdmin}>管理入口</button>
+          <button className="btn-outline admin-btn" onClick={onAdmin} title="管理入口">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4" /><path d="M5.5 20c.6-3.4 3.3-5.2 6.5-5.2s5.9 1.8 6.5 5.2" /></svg>
+            <span className="admin-label">管理入口</span>
+          </button>
         </div>
       </header>
 
-      <aside className="panel rail" aria-label="成果目录">
+      <aside className={`panel rail${railOpen ? " mobile-open" : ""}`} aria-label="成果目录">
         <div className="rail-title eyebrow">成果目录 · {items.length} 项</div>
         {items.map((item, i) => (
           <button
             key={item.uid}
             className={'rail-item' + (activeId === item.id ? ' active' : '')}
-            onClick={() => onPick(item)}
+            onClick={() => { onPick(item); setRailOpen(false) }}
           >
             <span
               className="thumb"
@@ -69,7 +77,8 @@ export default function Hud({ items, activeId, drawerOpen, onPick, guide, onDism
 
       {guide && (
         <div className="gesture">
-          拖动画面环视 <span>·</span> <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 移动 <span>·</span> 点击发光成果看详情
+          <span className="g-full">拖动画面环视 <span>·</span> <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 移动 <span>·</span> 点击发光成果看详情</span>
+          <span className="g-short">拖动环视 · 点亮成果看详情</span>
           <button className="close" aria-label="关闭引导" onClick={onDismissGuide}>×</button>
         </div>
       )}

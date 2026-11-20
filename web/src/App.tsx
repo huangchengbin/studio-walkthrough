@@ -192,7 +192,7 @@ export default function App() {
 
   return (
     <div className="app">
-      <Canvas flat shadows camera={{ fov: 78, position: START }} dpr={[1, 2]} gl={{ antialias: true }}>
+      <Canvas flat shadows camera={{ fov: 78, position: START }} dpr={[1, window.innerWidth < 820 ? 1.5 : 2]} gl={{ antialias: true }}>
         {catalog && (
           <Experience
             items={viewItems}
